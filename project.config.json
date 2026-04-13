@@ -1,0 +1,14 @@
+{
+  "description": "中国象棋开局训练小程序",
+  "packOptions": { "ignore": [] },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "miniprogram",
+  "appid": "touristappid",
+  "projectname": "xiangqi-opening-trainer"
+}
