@@ -1,14 +1,21 @@
+const PIECE_CHARS = {
+  'R': '俥', 'N': '傌', 'B': '相', 'A': '仕', 'K': '帥', 'C': '炮', 'P': '兵',
+  'r': '車', 'n': '馬', 'b': '象', 'a': '士', 'k': '將', 'c': '砲', 'p': '卒'
+};
+
 Component({
   properties: {
     boardData: { type: Array, value: [] },
     selected: { type: Array, value: null },
+    // TODO: implement board flip (mirror row/col) for black perspective
     flip: { type: Boolean, value: false }
   },
 
   data: {
     ctx: null,
     cellSize: 0,
-    margin: 20
+    margin: 24,
+    canvasRect: null
   },
 
   lifetimes: {
@@ -18,7 +25,7 @@ Component({
   },
 
   observers: {
-    'boardData,selected': function () {
+    'boardData,selected,flip': function () {
       this.draw();
     }
   },
@@ -39,6 +46,10 @@ Component({
         const cellSize = (width - margin * 2) / 8;
         this.setData({ ctx, cellSize, margin, width, height });
         this.draw();
+      });
+      query.select('#chessboard').boundingClientRect().exec((res2) => {
+        const rect = res2[0];
+        this.setData({ canvasRect: rect });
       });
     },
 
@@ -84,10 +95,6 @@ Component({
     },
 
     drawPieces(ctx, cellSize, margin) {
-      const PIECE_CHARS = {
-        'R': '俥', 'N': '傌', 'B': '相', 'A': '仕', 'K': '帥', 'C': '炮', 'P': '兵',
-        'r': '車', 'n': '馬', 'b': '象', 'a': '士', 'k': '將', 'c': '砲', 'p': '卒'
-      };
       for (let r = 0; r < 10; r++) {
         for (let c = 0; c < 9; c++) {
           const p = this.data.boardData[r]?.[c];
@@ -119,9 +126,10 @@ Component({
     },
 
     onTap(e) {
-      const { cellSize, margin } = this.data;
-      const x = e.detail.x - e.target.offsetLeft;
-      const y = e.detail.y - e.target.offsetTop;
+      const { cellSize, margin, canvasRect } = this.data;
+      if (!canvasRect) return;
+      const x = e.detail.x - canvasRect.left;
+      const y = e.detail.y - canvasRect.top;
       const c = Math.round((x - margin) / cellSize);
       const r = Math.round((y - margin) / cellSize);
       if (r >= 0 && r < 10 && c >= 0 && c < 9) {
