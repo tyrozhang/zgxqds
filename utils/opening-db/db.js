@@ -31,6 +31,8 @@ class OpeningDB {
   unlock(id) {
     const o = this.getOpeningById(id);
     if (o) o.locked = false;
+    const unlocked = this.data.filter(x => !x.locked).map(x => x.id);
+    wx.setStorageSync('unlockedOpenings', unlocked);
   }
 }
 

@@ -61,9 +61,6 @@ Page({
       success: () => {
         const db = new OpeningDB(openings);
         db.unlock(this.data.opening.id);
-        const unlocked = wx.getStorageSync('unlockedOpenings') || [];
-        unlocked.push(this.data.opening.id);
-        wx.setStorageSync('unlockedOpenings', unlocked);
         this.setData({ 'opening.locked': false });
         wx.showToast({ title: '解锁成功', icon: 'success' });
       },
