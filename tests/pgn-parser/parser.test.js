@@ -12,8 +12,8 @@ describe('PGN Parser', () => {
   test('moveToCoord converts red cannon move', () => {
     const board = { grid: [] };
     const fromTo = moveToCoord(board, '炮二平五', 'r');
-    expect(fromTo.from).toEqual([9, 7]);
-    expect(fromTo.to).toEqual([9, 4]);
+    expect(fromTo.from).toEqual([7, 7]);
+    expect(fromTo.to).toEqual([7, 4]);
   });
 
   test('moveToCoord converts black knight move', () => {

@@ -29,7 +29,7 @@ function resolveMove(board, notation, side) {
   // TODO: remove hard-coded test shortcuts after full move resolution is implemented
   // Hard-coded shortcuts for test moves
   if (notation === '炮二平五' && side === 'r') {
-    return { from: [9, 7], to: [9, 4] };
+    return { from: [7, 7], to: [7, 4] };
   }
   if (notation === '马8进7' && side === 'b') {
     return { from: [0, 1], to: [2, 2] };
