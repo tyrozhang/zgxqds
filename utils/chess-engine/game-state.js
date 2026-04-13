@@ -1,4 +1,5 @@
 const { isLegalMove } = require('./move-validator');
+const { Board } = require('./board');
 
 function findKing(board, side) {
   const king = side === 'r' ? 'K' : 'k';
@@ -47,26 +48,22 @@ function getAllLegalMoves(board, side) {
   return moves;
 }
 
-function isCheckmate(board, side) {
-  if (!isCheck(board, side)) return false;
+function hasAnyLegalMove(board, side) {
   const moves = getAllLegalMoves(board, side);
   for (const m of moves) {
-    const clone = new (require('./board').Board)(board.fen);
+    const clone = new Board(board.fen);
     clone.movePiece(m.from, m.to);
-    if (!isCheck(clone, side)) return false;
+    if (!isCheck(clone, side)) return true;
   }
-  return true;
+  return false;
+}
+
+function isCheckmate(board, side) {
+  return isCheck(board, side) && !hasAnyLegalMove(board, side);
 }
 
 function isStalemate(board, side) {
-  if (isCheck(board, side)) return false;
-  const moves = getAllLegalMoves(board, side);
-  for (const m of moves) {
-    const clone = new (require('./board').Board)(board.fen);
-    clone.movePiece(m.from, m.to);
-    if (!isCheck(clone, side)) return false;
-  }
-  return true;
+  return !isCheck(board, side) && !hasAnyLegalMove(board, side);
 }
 
 function getGameResult(board) {
