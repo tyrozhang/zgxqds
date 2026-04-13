@@ -1,4 +1,4 @@
-const { parsePGN, moveToCoord, coordToMove } = require('../../utils/pgn-parser/parser');
+const { parsePGN, moveToCoord } = require('../../utils/pgn-parser/parser');
 
 describe('PGN Parser', () => {
   test('parses simple pgn with main line', () => {
@@ -14,5 +14,12 @@ describe('PGN Parser', () => {
     const fromTo = moveToCoord(board, '炮二平五', 'r');
     expect(fromTo.from).toEqual([9, 7]);
     expect(fromTo.to).toEqual([9, 4]);
+  });
+
+  test('moveToCoord converts black knight move', () => {
+    const board = { grid: [] };
+    const fromTo = moveToCoord(board, '马8进7', 'b');
+    expect(fromTo.from).toEqual([0, 1]);
+    expect(fromTo.to).toEqual([2, 2]);
   });
 });

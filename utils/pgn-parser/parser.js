@@ -26,6 +26,7 @@ function getPieceDisplayName(piece) {
 }
 
 function resolveMove(board, notation, side) {
+  // TODO: remove hard-coded test shortcuts after full move resolution is implemented
   // Hard-coded shortcuts for test moves
   if (notation === '炮二平五' && side === 'r') {
     return { from: [9, 7], to: [9, 4] };
@@ -97,11 +98,12 @@ function parsePGN(pgn) {
   let side = board.sideToMove;
   for (const token of tokens) {
     const move = resolveMove(board, token, side);
-    if (move) {
-      mainLine.push({ notation: token, from: move.from, to: move.to });
-      board.movePiece(move.from, move.to);
-      side = side === 'r' ? 'b' : 'r';
+    if (!move) {
+      throw new Error(`Unresolvable move: ${token}`);
     }
+    mainLine.push({ notation: token, from: move.from, to: move.to });
+    board.movePiece(move.from, move.to);
+    side = side === 'r' ? 'b' : 'r';
   }
   return { headers, mainLine, variations: [] };
 }
