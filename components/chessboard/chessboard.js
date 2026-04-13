@@ -62,9 +62,6 @@ Component({
         ctx.stroke();
       }
       for (let c = 0; c < 9; c++) {
-        let startR = 0, endR = 9;
-        if (c === 0 || c === 8) { startR = 0; endR = 9; }
-        else { startR = 0; endR = 4; startR2 = 5; endR2 = 9; }
         ctx.beginPath();
         ctx.moveTo(margin + c * cellSize, margin + 0 * cellSize);
         ctx.lineTo(margin + c * cellSize, margin + 4 * cellSize);
@@ -97,7 +94,7 @@ Component({
           if (!p) continue;
           const x = margin + c * cellSize;
           const y = margin + r * cellSize;
-          const isRed = p === p.toUpperCase();
+          const isRed = p && p === p.toUpperCase();
           ctx.beginPath();
           ctx.arc(x, y, cellSize * 0.38, 0, Math.PI * 2);
           ctx.fillStyle = '#fff8e7';
