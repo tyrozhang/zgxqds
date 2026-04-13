@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(gh search:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(bash start-server.sh --project-dir \"D:\\\\zgxq\")",
+      "Bash(claude mcp:*)",
+      "Bash(claude:*)",
+      "Bash(rmdir plans:*)",
+      "Bash(rmdir .)",
+      "Bash(cmd //c \"rd /s /q D:\\\\\\\\zgxq\\\\\\\\docs\\\\\\\\superpowers\")",
+      "Bash(git:*)"
+    ]
+  }
+}
