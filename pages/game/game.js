@@ -80,11 +80,13 @@ Page({
     this.setData({ boardData: this.engine.board.grid, selected: null });
     const gameResult = this.checkGameOver();
     if (!gameResult) {
+      if (this.aiMoveTimeoutId) clearTimeout(this.aiMoveTimeoutId);
       this.aiMoveTimeoutId = setTimeout(() => this.playAIMove(), 500);
     }
   },
 
   playAIMove() {
+    if (!this.engine) return;
     const move = this.engine.getAIMove();
     if (move) {
       this.setData({ boardData: this.engine.board.grid });
