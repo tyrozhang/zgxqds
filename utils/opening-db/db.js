@@ -1,6 +1,6 @@
 class OpeningDB {
   constructor(data = []) {
-    this.data = data;
+    this.data = data.map(o => ({ ...o }));
   }
 
   getCategories() {
