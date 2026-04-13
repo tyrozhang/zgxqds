@@ -1,6 +1,10 @@
 class OpeningDB {
   constructor(data = []) {
     this.data = data.map(o => ({ ...o }));
+    const unlocked = wx.getStorageSync('unlockedOpenings') || [];
+    for (const o of this.data) {
+      if (unlocked.includes(o.id)) o.locked = false;
+    }
   }
 
   getCategories() {
