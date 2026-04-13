@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "chessboard": "/components/chessboard/chessboard"
+  }
+}
