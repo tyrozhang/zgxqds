@@ -66,7 +66,7 @@ function isStalemate(board, side) {
     clone.movePiece(m.from, m.to);
     if (!isCheck(clone, side)) return false;
   }
-  return moves.length === 0;
+  return true;
 }
 
 function getGameResult(board) {
