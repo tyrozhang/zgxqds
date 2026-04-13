@@ -2,6 +2,7 @@ const { StrictOpeningEngine } = require('../../utils/strict-opening/engine');
 const { getGameResult } = require('../../utils/chess-engine/game-state');
 const { OpeningDB } = require('../../utils/opening-db/db');
 const { parsePGN } = require('../../utils/pgn-parser/parser');
+const { playSound } = require('../../utils/audio');
 const openings = require('../../utils/opening-db/data/openings.json');
 
 Page({
@@ -78,6 +79,7 @@ Page({
     }
 
     this.setData({ boardData: this.engine.board.grid, selected: null });
+    playSound('move');
     const gameResult = this.checkGameOver();
     if (!gameResult) {
       if (this.aiMoveTimeoutId) clearTimeout(this.aiMoveTimeoutId);
@@ -90,6 +92,7 @@ Page({
     const move = this.engine.getAIMove();
     if (move) {
       this.setData({ boardData: this.engine.board.grid });
+      playSound('move');
       this.checkGameOver();
     }
   },
