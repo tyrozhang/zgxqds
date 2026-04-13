@@ -1,5 +1,5 @@
 const { StrictOpeningEngine } = require('../../utils/strict-opening/engine');
-const { getGameResult } = require('../../utils/chess-engine/game-state');
+const { getGameResult, isCheck } = require('../../utils/chess-engine/game-state');
 const { OpeningDB } = require('../../utils/opening-db/db');
 const { parsePGN } = require('../../utils/pgn-parser/parser');
 const { playSound } = require('../../utils/audio');
@@ -79,7 +79,8 @@ Page({
     }
 
     this.setData({ boardData: this.engine.board.grid, selected: null });
-    playSound('move');
+    const soundType = result.captured ? 'capture' : (isCheck(this.engine.board, this.engine.board.sideToMove) ? 'check' : 'move');
+    playSound(soundType);
     const gameResult = this.checkGameOver();
     if (!gameResult) {
       if (this.aiMoveTimeoutId) clearTimeout(this.aiMoveTimeoutId);
@@ -92,7 +93,8 @@ Page({
     const move = this.engine.getAIMove();
     if (move) {
       this.setData({ boardData: this.engine.board.grid });
-      playSound('move');
+      const soundType = move.captured ? 'capture' : (isCheck(this.engine.board, this.engine.board.sideToMove) ? 'check' : 'move');
+      playSound(soundType);
       this.checkGameOver();
     }
   },

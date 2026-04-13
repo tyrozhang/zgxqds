@@ -16,6 +16,12 @@ function stripHeaders(pgn) {
 }
 
 const FILE_MAP = { 一: 8, 二: 7, 三: 6, 四: 5, 五: 4, 六: 3, 七: 2, 八: 1, 九: 0 };
+const CHINESE_NUMBERS = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
+
+function parseStep(ch) {
+  if (CHINESE_NUMBERS[ch] !== undefined) return CHINESE_NUMBERS[ch];
+  return parseInt(ch, 10);
+}
 
 function getPieceDisplayName(piece) {
   const map = {
@@ -42,9 +48,10 @@ function resolveMove(board, notation, side) {
   }
 
   const pieceName = notation[0];
-  const action = notation[2];
-  const targetFileCh = notation[3];
-  const rankOrStep = notation[4];
+  const sourceFileCh = notation[1];
+  const postActionCh = notation[3];
+
+  const sourceFile = side === 'r' ? FILE_MAP[sourceFileCh] : (9 - parseInt(sourceFileCh, 10));
 
   const candidates = [];
   for (let r = 0; r < 10; r++) {
@@ -54,28 +61,29 @@ function resolveMove(board, notation, side) {
       const pSide = p === p.toLowerCase() ? 'b' : 'r';
       if (pSide !== side) continue;
       if (getPieceDisplayName(p) !== pieceName) continue;
+      if (c !== sourceFile) continue;
       for (let tr = 0; tr < 10; tr++) {
         for (let tc = 0; tc < 9; tc++) {
           if (isLegalMove(board, [r, c], [tr, tc])) {
             let matches = false;
             if (notation.includes('平')) {
-              const targetFile = side === 'r' ? FILE_MAP[targetFileCh] : (9 - parseInt(targetFileCh, 10));
+              const targetFile = side === 'r' ? FILE_MAP[postActionCh] : (9 - parseInt(postActionCh, 10));
               matches = tc === targetFile && tr === r;
             } else if (notation.includes('进')) {
               if (pieceName === '马' || pieceName === '象' || pieceName === '相' || pieceName === '士' || pieceName === '仕') {
-                const targetFile = side === 'r' ? FILE_MAP[targetFileCh] : (9 - parseInt(targetFileCh, 10));
+                const targetFile = side === 'r' ? FILE_MAP[postActionCh] : (9 - parseInt(postActionCh, 10));
                 matches = tc === targetFile;
               } else {
-                const step = parseInt(rankOrStep, 10);
+                const step = parseStep(postActionCh);
                 const targetRank = side === 'r' ? (r - step) : (r + step);
                 matches = tr === targetRank;
               }
             } else if (notation.includes('退')) {
               if (pieceName === '马' || pieceName === '象' || pieceName === '相' || pieceName === '士' || pieceName === '仕') {
-                const targetFile = side === 'r' ? FILE_MAP[targetFileCh] : (9 - parseInt(targetFileCh, 10));
+                const targetFile = side === 'r' ? FILE_MAP[postActionCh] : (9 - parseInt(postActionCh, 10));
                 matches = tc === targetFile;
               } else {
-                const step = parseInt(rankOrStep, 10);
+                const step = parseStep(postActionCh);
                 const targetRank = side === 'r' ? (r + step) : (r - step);
                 matches = tr === targetRank;
               }

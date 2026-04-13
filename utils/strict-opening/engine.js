@@ -17,14 +17,14 @@ class StrictOpeningEngine {
 
     const expected = this.getExpectedUserMove();
     if (expected && this.matchMove(from, to, expected)) {
-      this.applyMove(expected);
-      return { type: 'valid', move: expected };
+      const captured = this.applyMove(expected);
+      return { type: 'valid', move: expected, captured };
     }
 
     const err = this.findErrorBranch(from, to);
     if (err) {
-      this.applyMove(err.move);
-      return { type: 'typical-error', message: err.message, move: err.move };
+      const captured = this.applyMove(err.move);
+      return { type: 'typical-error', message: err.message, move: err.move, captured };
     }
 
     return { type: 'non-book', message: '非当前棋谱棋路，请再回去继续学习当前棋谱吧~' };
@@ -33,8 +33,8 @@ class StrictOpeningEngine {
   getAIMove() {
     if (this.currentStep < this.pgnTree.mainLine.length) {
       const move = this.pgnTree.mainLine[this.currentStep];
-      this.applyMove(move);
-      return move;
+      const captured = this.applyMove(move);
+      return { ...move, captured };
     }
     return null;
   }
@@ -59,9 +59,10 @@ class StrictOpeningEngine {
   }
 
   applyMove(move) {
-    this.board.movePiece(move.from, move.to);
+    const captured = this.board.movePiece(move.from, move.to);
     this.moveHistory.push(move);
     this.currentStep++;
+    return captured;
   }
 
   undo() {

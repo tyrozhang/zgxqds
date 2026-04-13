@@ -41,6 +41,8 @@ function isLegalMove(board, from, to) {
   const target = board.grid[tr][tc];
   if (isSameSide(piece, target)) return false;
 
+  if (fr === tr && fc === tc) return false;
+
   const dr = tr - fr;
   const dc = tc - fc;
   const adr = Math.abs(dr);

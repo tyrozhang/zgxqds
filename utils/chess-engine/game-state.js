@@ -69,8 +69,11 @@ function isStalemate(board, side) {
 function getGameResult(board) {
   if (isCheckmate(board, 'r')) return { winner: 'b', reason: 'checkmate' };
   if (isCheckmate(board, 'b')) return { winner: 'r', reason: 'checkmate' };
-  if (isStalemate(board, board.sideToMove)) {
-    return { winner: board.sideToMove === 'r' ? 'b' : 'r', reason: 'stalemate' };
+  if (isStalemate(board, 'r')) {
+    return { winner: 'b', reason: 'stalemate' };
+  }
+  if (isStalemate(board, 'b')) {
+    return { winner: 'r', reason: 'stalemate' };
   }
   return null;
 }

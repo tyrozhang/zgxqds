@@ -39,6 +39,6 @@ describe('StrictOpeningEngine', () => {
     const engine = new StrictOpeningEngine(pgnTree);
     engine.handleUserMove([7, 7], [7, 4]);
     const ai = engine.getAIMove();
-    expect(ai).toEqual({ notation: '马8进7', from: [0, 1], to: [2, 2] });
+    expect(ai).toMatchObject({ notation: '马8进7', from: [0, 1], to: [2, 2] });
   });
 });
