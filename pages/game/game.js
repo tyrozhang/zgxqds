@@ -1,4 +1,3 @@
-const { Board } = require('../../utils/chess-engine/board');
 const { StrictOpeningEngine } = require('../../utils/strict-opening/engine');
 const { getGameResult } = require('../../utils/chess-engine/game-state');
 const { OpeningDB } = require('../../utils/opening-db/db');
@@ -14,6 +13,7 @@ Page({
   },
 
   engine: null,
+  aiMoveTimeoutId: null,
 
   onLoad(options) {
     const id = options.id;
@@ -22,7 +22,14 @@ Page({
     const opening = db.getOpeningById(id);
     if (!opening) { wx.navigateBack(); return; }
 
-    const tree = parsePGN(opening.pgn);
+    let tree;
+    try {
+      tree = parsePGN(opening.pgn);
+    } catch (err) {
+      wx.showToast({ title: '棋谱解析失败', icon: 'none' });
+      wx.navigateBack();
+      return;
+    }
     this.engine = new StrictOpeningEngine(tree, userSide);
     this.setData({
       openingName: opening.name,
@@ -32,11 +39,12 @@ Page({
     });
 
     if (userSide === 'b') {
-      setTimeout(() => this.playAIMove(), 300);
+      this.aiMoveTimeoutId = setTimeout(() => this.playAIMove(), 300);
     }
   },
 
   onCellTap(e) {
+    if (!this.engine || !this.engine.board) return;
     const { row, col } = e.detail;
     const board = this.engine.board;
     const piece = board.grid[row][col];
@@ -70,10 +78,9 @@ Page({
     }
 
     this.setData({ boardData: this.engine.board.grid, selected: null });
-    this.checkGameOver();
-
-    if (!this.isGameOver()) {
-      setTimeout(() => this.playAIMove(), 500);
+    const gameResult = this.checkGameOver();
+    if (!gameResult) {
+      this.aiMoveTimeoutId = setTimeout(() => this.playAIMove(), 500);
     }
   },
 
@@ -86,12 +93,19 @@ Page({
   },
 
   undo() {
-    if (this.engine.moveHistory.length === 0) return;
+    if (!this.engine || this.engine.moveHistory.length === 0) return;
     this.engine.undo();
     if (this.engine.moveHistory.length > 0 && this.engine.board.sideToMove !== this.data.userSide) {
       this.engine.undo();
     }
     this.setData({ boardData: this.engine.board.grid, selected: null });
+  },
+
+  onUnload() {
+    if (this.aiMoveTimeoutId) {
+      clearTimeout(this.aiMoveTimeoutId);
+      this.aiMoveTimeoutId = null;
+    }
   },
 
   resign() {
@@ -111,10 +125,7 @@ Page({
       const userWin = result.winner === this.data.userSide;
       this.showResult(result.winner, userWin ? '恭喜获胜' : '对局结束');
     }
-  },
-
-  isGameOver() {
-    return getGameResult(this.engine.board) !== null;
+    return result;
   },
 
   showResult(winner, message) {
