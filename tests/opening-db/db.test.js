@@ -1,5 +1,9 @@
 const { OpeningDB } = require('../../utils/opening-db/db');
 
+global.wx = {
+  getStorageSync: jest.fn(() => [])
+};
+
 describe('OpeningDB', () => {
   const db = new OpeningDB([
     { id: 'c1', category: '中炮', name: '中炮对屏风马', pgn: '1. 炮二平五 马8进7', locked: false },
