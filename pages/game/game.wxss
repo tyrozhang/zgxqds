@@ -1,0 +1,12 @@
+.container { padding: 16rpx; }
+.opening-title { text-align: center; font-size: 32rpx; color: #5c3a21; margin-bottom: 12rpx; display: block; }
+.controls { display: flex; justify-content: center; gap: 24rpx; margin-top: 20rpx; }
+.btn-wood {
+  background: linear-gradient(180deg, #e8dcc0 0%, #c5b08e 100%);
+  border: 2rpx solid #8b6914;
+  color: #3e2723;
+  font-size: 30rpx;
+  padding: 12rpx 48rpx;
+  border-radius: 12rpx;
+}
+.btn-wood.danger { background: linear-gradient(180deg, #e57373 0%, #c62828 100%); color: white; border-color: #b71c1c; }

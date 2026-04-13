@@ -1,0 +1,8 @@
+<view class="container">
+  <text class="opening-title">{{openingName}}</text>
+  <chessboard boardData="{{boardData}}" selected="{{selected}}" bind:celltap="onCellTap" />
+  <view class="controls">
+    <button class="btn-wood" bindtap="undo">悔棋</button>
+    <button class="btn-wood danger" bindtap="resign">认输</button>
+  </view>
+</view>
