@@ -43,7 +43,7 @@ Page({
     for (let i = 0; i <= index && i < tree.mainLine.length; i++) {
       board.movePiece(tree.mainLine[i].from, tree.mainLine[i].to);
     }
-    this.setData({ previewBoard: board.grid });
+    this.setData({ previewBoard: board.grid, previewFen: board.fen });
   },
 
   startPractice(e) {
