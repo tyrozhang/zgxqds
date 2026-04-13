@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="header">
+    <text class="title">象棋开局训练</text>
+  </view>
+  <view class="category-list">
+    <view wx:for="{{categories}}" wx:key="*this" class="category-card" bindtap="goToCategory" data-name="{{item}}">
+      <text class="category-name">{{item}}</text>
+    </view>
+  </view>
+</view>
