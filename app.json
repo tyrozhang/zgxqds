@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/loading/loading",
+    "pages/index/index",
+    "pages/openings/openings",
+    "pages/opening-detail/opening-detail",
+    "pages/game/game",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#8B4513",
+    "navigationBarTitleText": "象棋开局训练",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

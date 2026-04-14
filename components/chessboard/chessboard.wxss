@@ -1,0 +1,10 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx;
+}
+.chessboard {
+  width: 720rpx;
+  height: 800rpx;
+  background-color: #f0d9b5;
+}
