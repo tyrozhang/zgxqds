@@ -12,6 +12,12 @@ This is a newly initialized project. No codebase exists yet. Fill in the section
 
 ---
 
+## 作者信息
+
+**GitHub / Git:** tyrozhang
+
+---
+
 ## 对话要求
 全程使用中文进行对话。
 

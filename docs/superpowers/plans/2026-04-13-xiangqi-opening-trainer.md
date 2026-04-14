@@ -64,7 +64,7 @@ Create: `app.json`
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#8B4513",
-    "navigationBarTitleText": "象棋开局训练",
+    "navigationBarTitleText": "中国象棋·开局大师",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
@@ -91,7 +91,7 @@ page {
 Create: `project.config.json`
 ```json
 {
-  "description": "中国象棋开局训练小程序",
+  "description": "中国象棋·开局大师 (by tyrozhang)",
   "packOptions": { "ignore": [] },
   "setting": {
     "urlCheck": false,
@@ -1249,7 +1249,7 @@ Create: `pages/index/index.wxml`
 ```html
 <view class="container">
   <view class="header">
-    <text class="title">象棋开局训练</text>
+    <text class="title">中国象棋·开局大师</text>
   </view>
   <view class="category-list">
     <view wx:for="{{categories}}" wx:key="*this" class="category-card" bindtap="goToCategory" data-name="{{item}}">
