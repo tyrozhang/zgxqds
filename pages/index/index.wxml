@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="board-wrapper">
+    <xiangqiboard
+      id="board"
+      position="start"
+      orientation="red"
+      draggable="{{true}}"
+      moveSound="/static/sounds/move.mp3"
+      checkSound="/static/sounds/check.mp3"
+      bind:change="onBoardChange"
+      bind:drop="onBoardDrop"
+      bind:dragstart="onDragStart"
+      bind:moveend="onMoveEnd"
+      bind:snapbackend="onSnapbackEnd"
+    ></xiangqiboard>
+  </view>
+
+  <view class="controls">
+    <button size="mini" bindtap="onFlip">翻转</button>
+    <button size="mini" bindtap="onStart">开始局面</button>
+    <button size="mini" bindtap="onClear">清空</button>
+    <button size="mini" bindtap="onMove">走一步</button>
+  </view>
+
+  <view class="status" wx:if="{{lastEvent}}">
+    <text>{{lastEvent}}</text>
+  </view>
+</view>

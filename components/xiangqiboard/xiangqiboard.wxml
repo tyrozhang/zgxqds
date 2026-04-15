@@ -1,0 +1,11 @@
+<view class="xiangqiboard-container">
+  <canvas
+    type="2d"
+    id="boardCanvas"
+    class="board-canvas"
+    style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  ></canvas>
+</view>

@@ -33,5 +33,6 @@
   "appid": "wx54c195c15e8464a0",
   "projectname": "xiangqi-opening-trainer",
   "simulatorPluginLibVersion": {},
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "3.15.2"
 }
