@@ -88,6 +88,7 @@ Page({
   openingTree: null,
   currentNode: null,
   isAiThinking: false,
+  isGameOver: false,
 
   onLoad(options) {
     // 选项示例：{ side: 'red' | 'black' }
@@ -102,6 +103,7 @@ Page({
     this.engine = new Xiangqi()
     this.openingTree = buildNodeMap(JSON.parse(JSON.stringify(SAMPLE_OPENING_TREE)))
     this.currentNode = this.openingTree
+    this.isGameOver = false
 
     const orientation = side === 'black' ? 'black' : 'red'
     this.setData({
@@ -129,9 +131,15 @@ Page({
     return color + '走'
   },
 
+  getStatusText() {
+    const hasChildren = this.currentNode && this.currentNode.children && this.currentNode.children.length > 0
+    if (!hasChildren) return '棋谱练习已结束'
+    return this.currentNode.comment || ''
+  },
+
   // 核心：严格棋谱模式走子验证
   onBeforeDrop(e) {
-    if (this.isAiThinking) {
+    if (this.isAiThinking || this.isGameOver) {
       e.detail.prevent()
       return
     }
@@ -191,7 +199,7 @@ Page({
     this.currentNode = branch
     this.setData({
       turnText: this.getTurnText(),
-      statusText: branch.comment || '',
+      statusText: this.getStatusText(),
       allowedMoves: this.getAllowedMoves()
     })
 
@@ -215,6 +223,7 @@ Page({
   playAiMove() {
     if (!this.currentNode.children || this.currentNode.children.length === 0) {
       // 棋谱结束，检查胜负
+      this.isGameOver = true
       this.checkGameOver()
       return
     }
@@ -235,7 +244,7 @@ Page({
     this.currentNode = aiBranch
     this.setData({
       turnText: this.getTurnText(),
-      statusText: aiBranch.comment || '',
+      statusText: this.getStatusText(),
       lastMove: { source: from, target: to },
       allowedMoves: this.getAllowedMoves()
     })
@@ -244,6 +253,7 @@ Page({
   checkGameOver() {
     const isOpeningEnd = !this.currentNode.children || this.currentNode.children.length === 0
     if (this.engine.game_over() || isOpeningEnd) {
+      this.isGameOver = true
       let result = ''
       if (this.engine.in_checkmate()) {
         result = this.engine.turn() === 'r' ? '黑方胜' : '红方胜'
@@ -293,10 +303,12 @@ Page({
       this.currentNode = this.openingTree
     }
 
+    this.isGameOver = false
+
     this.setData({
       position: fen,
       turnText: this.getTurnText(),
-      statusText: this.currentNode.comment || '',
+      statusText: this.getStatusText(),
       lastMove: null,
       allowedMoves: this.getAllowedMoves()
     })
