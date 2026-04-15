@@ -44,5 +44,11 @@ Page({
       // 示例：炮二平五
       this.board.move('h3-h4', true)
     }
+  },
+
+  onGoGame() {
+    wx.navigateTo({
+      url: '/pages/game/game?side=red'
+    })
   }
 })

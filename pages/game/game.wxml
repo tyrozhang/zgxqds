@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="board-wrapper">
+    <xiangqiboard
+      id="board"
+      position="{{position}}"
+      orientation="{{orientation}}"
+      draggable="{{true}}"
+      moveSound="/static/sounds/move.mp3"
+      checkSound="/static/sounds/check.mp3"
+      bind:beforedrop="onBeforeDrop"
+      bind:drop="onBoardDrop"
+      bind:moveend="onMoveEnd"
+    ></xiangqiboard>
+  </view>
+
+  <view class="info-bar">
+    <text class="turn-text">{{turnText}}</text>
+    <text class="status-text" wx:if="{{statusText}}">{{statusText}}</text>
+  </view>
+
+  <view class="hints" wx:if="{{allowedMoves.length > 0}}">
+    <text class="hint-label">当前允许走法：</text>
+    <text class="hint-moves">{{allowedMoves.join('、')}}</text>
+  </view>
+
+  <view class="controls">
+    <button size="mini" bindtap="onUndo">悔棋</button>
+    <button size="mini" bindtap="onRestart">重新开始</button>
+    <button size="mini" bindtap="onBack">返回首页</button>
+  </view>
+</view>

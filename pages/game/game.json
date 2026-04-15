@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "xiangqiboard": "/components/xiangqiboard/xiangqiboard"
+  },
+  "navigationBarTitleText": "开局练习"
+}

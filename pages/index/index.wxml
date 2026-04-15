@@ -22,6 +22,10 @@
     <button size="mini" bindtap="onMove">走一步</button>
   </view>
 
+  <view class="navigate">
+    <button type="primary" bindtap="onGoGame">进入对弈页（测试）</button>
+  </view>
+
   <view class="status" wx:if="{{lastEvent}}">
     <text>{{lastEvent}}</text>
   </view>
