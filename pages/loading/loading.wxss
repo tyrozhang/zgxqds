@@ -1,2 +1,0 @@
-.loading-page { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--bg-paper); }
-.loading-text { font-size: 36rpx; color: #5c3a21; }

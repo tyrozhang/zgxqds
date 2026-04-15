@@ -1,3 +1,0 @@
-<view class="board-container">
-  <canvas type="2d" id="chessboard" class="chessboard" bindtap="onTap"></canvas>
-</view>
