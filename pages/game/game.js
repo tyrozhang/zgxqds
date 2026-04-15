@@ -140,6 +140,17 @@ Page({
 
     // 调试日志：帮助排查坐标与匹配问题
     const available = this.getAllowedMoves()
+    if (available.length === 0) {
+      console.log('[onBeforeDrop] 棋谱已结束，已拦截')
+      prevent()
+      wx.showToast({
+        title: '棋谱练习已结束',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
     const moveKey = source + target
     console.log('[onBeforeDrop]', source, '->', target, 'moveKey:', moveKey, 'available:', available)
 
@@ -231,12 +242,15 @@ Page({
   },
 
   checkGameOver() {
-    if (this.engine.game_over()) {
+    const isOpeningEnd = !this.currentNode.children || this.currentNode.children.length === 0
+    if (this.engine.game_over() || isOpeningEnd) {
       let result = ''
       if (this.engine.in_checkmate()) {
         result = this.engine.turn() === 'r' ? '黑方胜' : '红方胜'
       } else if (this.engine.in_draw()) {
         result = '和棋'
+      } else if (isOpeningEnd) {
+        result = '棋谱练习结束'
       } else {
         result = '对局结束'
       }
