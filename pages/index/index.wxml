@@ -1,32 +1,19 @@
 <view class="container">
-  <view class="board-wrapper">
-    <xiangqiboard
-      id="board"
-      position="start"
-      orientation="red"
-      draggable="{{true}}"
-      moveSound="/static/sounds/move.mp3"
-      checkSound="/static/sounds/check.mp3"
-      bind:change="onBoardChange"
-      bind:drop="onBoardDrop"
-      bind:dragstart="onDragStart"
-      bind:moveend="onMoveEnd"
-      bind:snapbackend="onSnapbackEnd"
-    ></xiangqiboard>
+  <view class="header">
+    <text class="title">中国象棋·开局大师</text>
+    <text class="subtitle">选择开局体系，开始练习</text>
   </view>
 
-  <view class="controls">
-    <button size="mini" bindtap="onFlip">翻转</button>
-    <button size="mini" bindtap="onStart">开始局面</button>
-    <button size="mini" bindtap="onClear">清空</button>
-    <button size="mini" bindtap="onMove">走一步</button>
-  </view>
-
-  <view class="navigate">
-    <button type="primary" bindtap="onGoGame">进入对弈页（测试）</button>
-  </view>
-
-  <view class="status" wx:if="{{lastEvent}}">
-    <text>{{lastEvent}}</text>
+  <view class="grid">
+    <view
+      class="card"
+      wx:for="{{categories}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onCategoryTap"
+    >
+      <text class="card-name">{{item.name}}</text>
+      <text class="card-desc">{{item.desc}}</text>
+    </view>
   </view>
 </view>

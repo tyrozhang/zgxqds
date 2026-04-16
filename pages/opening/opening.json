@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "开局变例"
+  "navigationBarTitleText": "开局变例",
+  "usingComponents": {
+    "xiangqiboard": "/components/xiangqiboard/xiangqiboard"
+  }
 }

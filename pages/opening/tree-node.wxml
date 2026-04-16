@@ -1,0 +1,25 @@
+<template name="treeNode">
+  <view class="node">
+    <view class="node-row" style="padding-left: {{node.depth * 24}}rpx;">
+      <text
+        class="node-toggle"
+        wx:if="{{node.children && node.children.length}}"
+        data-path="{{node.pathStr}}"
+        bindtap="onToggleNode"
+      >{{node.expanded ? '▼' : '▶'}}</text>
+      <text class="node-toggle placeholder" wx:else></text>
+      <text
+        class="node-san {{node.isMainLine ? 'main' : ''}} {{node.isTypicalError ? 'error' : ''}}"
+        data-path="{{node.pathStr}}"
+        bindtap="onPreviewNode"
+      >{{node.san || '开局'}}</text>
+    </view>
+    <block wx:if="{{node.expanded}}">
+      <block wx:for="{{node.children}}" wx:key="move">
+        <template is="treeNode" data="{{node: item}}" />
+      </block>
+    </block>
+  </view>
+</template>
+
+<template is="treeNode" data="{{node: tree}}" />
