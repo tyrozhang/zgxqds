@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="user-card">
+    <image wx:if="{{hasUserInfo}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <view wx:else class="avatar placeholder"></view>
+    <text wx:if="{{hasUserInfo}}" class="nickname">{{userInfo.nickName}}</text>
+    <button wx:else class="login-btn" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</button>
+  </view>
+
+  <view class="section">
+    <view class="section-title">已购开局</view>
+    <view wx:if="{{unlockedList.length}}" class="list">
+      <view class="list-item" wx:for="{{unlockedList}}" wx:key="id">
+        <text class="list-text">{{item.name}}</text>
+      </view>
+    </view>
+    <view wx:else class="empty">暂无已购开局</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">设置</view>
+    <view class="setting-row">
+      <text>音效</text>
+      <switch checked="{{soundEnabled}}" bindchange="onToggleSound" />
+    </view>
+  </view>
+</view>

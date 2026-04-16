@@ -1,0 +1,328 @@
+{
+  "id": "zhongpao-pingfengma",
+  "meta": {
+    "name": "开局教学：当头炮分支演示",
+    "category": "zhongpao"
+  },
+  "tree": {
+    "move": "h2e2",
+    "san": "炮二平五",
+    "isMainLine": true,
+    "children": [
+      {
+        "move": "b9c7",
+        "san": "马8进7",
+        "isMainLine": true,
+        "children": [
+          {
+            "move": "b0c2",
+            "san": "马二进三",
+            "isMainLine": true,
+            "children": [
+              {
+                "move": "a9b9",
+                "san": "车9平8",
+                "isMainLine": true,
+                "children": [
+                  {
+                    "move": "a0b0",
+                    "san": "车一平二",
+                    "isMainLine": true,
+                    "children": [
+                      {
+                        "move": "h9g7",
+                        "san": "马2进3",
+                        "isMainLine": true,
+                        "children": [
+                          {
+                            "move": "c3c4",
+                            "san": "兵七进一",
+                            "isMainLine": true,
+                            "children": [
+                              {
+                                "move": "c6c5",
+                                "san": "卒7进1",
+                                "isMainLine": true,
+                                "children": [
+                                  {
+                                    "move": "b7e7",
+                                    "san": "炮8平5",
+                                    "isMainLine": false,
+                                    "children": [
+                                      {
+                                        "move": "b0c2",
+                                        "san": "马二进三",
+                                        "isMainLine": false,
+                                        "children": [
+                                          {
+                                            "move": "b9c7",
+                                            "san": "马8进7",
+                                            "isMainLine": false,
+                                            "children": [
+                                              {
+                                                "move": "a0b0",
+                                                "san": "车一平二",
+                                                "isMainLine": false,
+                                                "children": [
+                                                  {
+                                                    "move": "a9a8",
+                                                    "san": "车9进1",
+                                                    "isMainLine": false,
+                                                    "children": [
+                                                      {
+                                                        "move": "h0g2",
+                                                        "san": "马八进七",
+                                                        "isMainLine": false,
+                                                        "children": [
+                                                          {
+                                                            "move": "a8d8",
+                                                            "san": "车9平4",
+                                                            "isMainLine": false,
+                                                            "children": [
+                                                              {
+                                                                "move": "c1c2",
+                                                                "san": "兵三进一",
+                                                                "isMainLine": false,
+                                                                "children": [
+                                                                  {
+                                                                    "move": "h9g7",
+                                                                    "san": "马2进3",
+                                                                    "isMainLine": false,
+                                                                    "children": []
+                                                                  }
+                                                                ],
+                                                                "comment": "黑方横车占右肋道，准备威胁红方七路马"
+                                                              }
+                                                            ]
+                                                          }
+                                                        ],
+                                                        "comment": "形成顺炮直车对横车的典型局面"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "comment": "双方各出大子"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "comment": "分支类型：正确 | 分支名称：顺手炮 | 推荐度：★★★★☆\n评估：+0.25\n教学要点：顺手炮针锋相对，以攻对攻，形成激烈对杀局面，适合善于搏杀的风格"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "move": "d9e8",
+                                    "san": "士6进5",
+                                    "isMainLine": false,
+                                    "children": [
+                                      {
+                                        "move": "b0c2",
+                                        "san": "马二进三",
+                                        "isMainLine": false,
+                                        "children": [
+                                          {
+                                            "move": "b9c7",
+                                            "san": "马8进7",
+                                            "isMainLine": false,
+                                            "children": [
+                                              {
+                                                "move": "a0b0",
+                                                "san": "车一平二",
+                                                "isMainLine": false,
+                                                "children": [
+                                                  {
+                                                    "move": "a9b9",
+                                                    "san": "车9平8",
+                                                    "isMainLine": false,
+                                                    "children": [
+                                                      {
+                                                        "move": "h0g2",
+                                                        "san": "马八进七",
+                                                        "isMainLine": false,
+                                                        "children": [
+                                                          {
+                                                            "move": "h7e7",
+                                                            "san": "炮2平4",
+                                                            "isMainLine": false,
+                                                            "children": [
+                                                              {
+                                                                "move": "b0b6",
+                                                                "san": "车二进六",
+                                                                "isMainLine": false,
+                                                                "children": [
+                                                                  {
+                                                                    "move": "b7a7",
+                                                                    "san": "炮8平9",
+                                                                    "isMainLine": false,
+                                                                    "children": [
+                                                                      {
+                                                                        "move": "b0b2",
+                                                                        "san": "车二平三",
+                                                                        "isMainLine": false,
+                                                                        "children": [
+                                                                          {
+                                                                            "move": "a7a8",
+                                                                            "san": "炮9退1",
+                                                                            "isMainLine": false,
+                                                                            "children": [
+                                                                              {
+                                                                                "move": "b2a2",
+                                                                                "san": "炮八平九",
+                                                                                "isMainLine": false,
+                                                                                "children": [
+                                                                                  {
+                                                                                    "move": "h9g7",
+                                                                                    "san": "马2进3",
+                                                                                    "isMainLine": false,
+                                                                                    "children": [
+                                                                                      {
+                                                                                        "move": "a0b0",
+                                                                                        "san": "车九平八",
+                                                                                        "isMainLine": false,
+                                                                                        "children": [
+                                                                                          {
+                                                                                            "move": "i9h9",
+                                                                                            "san": "车1平2",
+                                                                                            "isMainLine": false,
+                                                                                            "children": [
+                                                                                              {
+                                                                                                "move": "c2c3",
+                                                                                                "san": "兵五进一",
+                                                                                                "isMainLine": false,
+                                                                                                "children": [],
+                                                                                                "comment": "红方出车，黑车邀兑"
+                                                                                              }
+                                                                                            ]
+                                                                                          }
+                                                                                        ],
+                                                                                        "comment": "红方平炮通车路，黑方跳马准备出车"
+                                                                                      }
+                                                                                    ]
+                                                                                  }
+                                                                                ],
+                                                                                "comment": "红方平车压马，黑炮退边准备平7反击"
+                                                                              }
+                                                                            ]
+                                                                          }
+                                                                        ],
+                                                                        "comment": "变着：黑方兑车试图缓解压力\n评估：-2.0\n错误原因：软手，应卒3进1活通右马"
+                                                                      }
+                                                                    ]
+                                                                  },
+                                                                  {
+                                                                    "move": "h9g7",
+                                                                    "san": "马2进3",
+                                                                    "isMainLine": false,
+                                                                    "children": [
+                                                                      {
+                                                                        "move": "c2c3",
+                                                                        "san": "兵五进一",
+                                                                        "isMainLine": false,
+                                                                        "children": [
+                                                                          {
+                                                                            "move": "c5c4",
+                                                                            "san": "卒5进1",
+                                                                            "isMainLine": false,
+                                                                            "children": [
+                                                                              {
+                                                                                "move": "e2e5",
+                                                                                "san": "炮五进三",
+                                                                                "isMainLine": false,
+                                                                                "children": [
+                                                                                  {
+                                                                                    "move": "b7e7",
+                                                                                    "san": "炮8平5",
+                                                                                    "isMainLine": false,
+                                                                                    "children": [
+                                                                                      {
+                                                                                        "move": "e5e8",
+                                                                                        "san": "炮五进二",
+                                                                                        "isMainLine": false,
+                                                                                        "children": [
+                                                                                          {
+                                                                                            "move": "c9e7",
+                                                                                            "san": "象3进5",
+                                                                                            "isMainLine": false,
+                                                                                            "children": [
+                                                                                              {
+                                                                                                "move": "b0b2",
+                                                                                                "san": "车二平三",
+                                                                                                "isMainLine": false,
+                                                                                                "children": [
+                                                                                                  {
+                                                                                                    "move": "c5b5",
+                                                                                                    "san": "马3退4",
+                                                                                                    "isMainLine": false,
+                                                                                                    "children": [
+                                                                                                      {
+                                                                                                        "move": "c3d4",
+                                                                                                        "san": "马七进五",
+                                                                                                        "isMainLine": false,
+                                                                                                        "children": [],
+                                                                                                        "comment": "红车压马，黑马被迫退回，局势崩溃"
+                                                                                                      }
+                                                                                                    ]
+                                                                                                  }
+                                                                                                ],
+                                                                                                "comment": "兑炮后黑方飞象，中路门户洞开"
+                                                                                              }
+                                                                                            ]
+                                                                                          }
+                                                                                        ],
+                                                                                        "comment": "红方中炮取卒，黑方被迫平炮中路防守"
+                                                                                      }
+                                                                                    ]
+                                                                                  }
+                                                                                ],
+                                                                                "comment": "红方冲中兵突破，黑方被迫吃兵"
+                                                                              }
+                                                                            ]
+                                                                          }
+                                                                        ],
+                                                                        "comment": "变着：黑方跳马试图快速出子\n评估：-2.0"
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ],
+                                                                "comment": "红方双马灵活，黑方右炮平士角准备开车路"
+                                                              }
+                                                            ]
+                                                          }
+                                                        ],
+                                                        "comment": "黑车只能直出，被红车牵制，失去主动权"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "comment": "红方正常出子，黑方被迫跳马，因士挡路无法横车"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "comment": "分支类型：错误 | 分支名称：过早补士 | 危险度：★★★★☆ | 错误类型：战略缓手\n评估：-1.25\n错误原因：开局阶段过早补士阻碍左车出动，违反快出大子原则。士应待需要时再补，过早补士浪费步数且限制己方子力调度\n教学要点：开局三原则——快出大子、抢占要道、适时补士。士是防守子力，过早补士会限制己方灵活性",
+                                        "isTypicalError": true,
+                                        "errorComment": "开局阶段过早补士阻碍左车出动，违反快出大子原则。士应待需要时再补，过早补士浪费步数且限制己方子力调度"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ],
+                            "comment": "形成中炮对屏风马经典布局"
+                          }
+                        ]
+                      }
+                    ],
+                    "comment": "红方跳马出车，正常出子"
+                  }
+                ]
+              }
+            ],
+            "comment": "分支类型：正确 | 分支名称：屏风马 | 推荐度：★★★★★\n评估：+0.15\n教学要点：屏风马是中炮开局最稳健的应法，左右均衡，可刚可柔，是职业棋手的主流选择"
+          }
+        ],
+        "comment": "棋谱说明：本棋谱演示红方当头炮（炮二平五）后，黑方的三种应对选择。包含两个正确分支和一个隐蔽错误分支。目标局面：红方炮二平五后，黑方选择应对。"
+      }
+    ]
+  }
+}

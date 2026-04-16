@@ -21,7 +21,17 @@
       "Bash(gh:*)",
       "Bash(node -e ':*)",
       "Bash(npm test:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(cp D:/xiangqiboardjs/weapp/components/xiangqiboard/* D:/zgxq/components/xiangqiboard/)",
+      "Bash(cp D:/xiangqiboardjs/weapp/utils/chess-utils.js D:/zgxq/utils/)",
+      "Bash(cp -r D:/xiangqiboardjs/weapp/static/boards/wikimedia/* D:/zgxq/static/boards/wikimedia/)",
+      "Bash(cp -r D:/xiangqiboardjs/weapp/static/pieces/wikimedia/* D:/zgxq/static/pieces/wikimedia/)",
+      "Bash(cp -r D:/xiangqiboardjs/weapp/static/sounds/* D:/zgxq/static/sounds/)",
+      "Bash(npm search:*)",
+      "Bash(curl -sL https://raw.githubusercontent.com/lengyanyu258/xiangqi.js/dev/xiangqi.js)",
+      "Read(//tmp/**)",
+      "Bash(cat .git/worktrees/*/HEAD)"
     ]
   }
 }

@@ -1,54 +1,39 @@
 Page({
   data: {
-    lastEvent: ''
+    categories: [
+      { id: 'zhongpao', name: '中炮', desc: '当头炮，攻势凌厉' },
+      { id: 'feixiang', name: '飞相', desc: '稳扎稳打，先守后攻' },
+      { id: 'xianren', name: '仙人指路', desc: '灵活多变，试探应手' },
+      { id: 'qima', name: '起马', desc: '均衡出子，伺机而动' },
+      { id: 'guogong', name: '过宫炮', desc: '集中一炮，侧翼出击' }
+    ],
+    userInfo: null,
+    hasUserInfo: false
   },
 
-  onReady() {
-    this.board = this.selectComponent('#board')
+  onShow() {
+    this.loadUserInfo()
   },
 
-  onBoardChange(e) {
-    this.setData({ lastEvent: 'change: ' + JSON.stringify(e.detail.newPos).slice(0, 60) })
+  loadUserInfo() {
+    const userData = wx.getStorageSync('userData') || {}
+    const hasUserInfo = !!(userData.nickName && userData.avatarUrl)
+    this.setData({
+      userInfo: userData,
+      hasUserInfo
+    })
   },
 
-  onBoardDrop(e) {
-    this.setData({ lastEvent: 'drop: ' + e.detail.source + ' -> ' + e.detail.square })
-  },
-
-  onDragStart(e) {
-    this.setData({ lastEvent: 'dragstart: ' + e.detail.piece + ' @ ' + e.detail.source })
-  },
-
-  onMoveEnd(e) {
-    this.setData({ lastEvent: 'moveend' })
-  },
-
-  onSnapbackEnd(e) {
-    this.setData({ lastEvent: 'snapbackend' })
-  },
-
-  onFlip() {
-    if (this.board) this.board.flip()
-  },
-
-  onStart() {
-    if (this.board) this.board.start(true)
-  },
-
-  onClear() {
-    if (this.board) this.board.clear(true)
-  },
-
-  onMove() {
-    if (this.board) {
-      // 示例：炮二平五
-      this.board.move('h3-h4', true)
-    }
-  },
-
-  onGoGame() {
+  onCategoryTap(e) {
+    const id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: '/pages/game/game?side=red'
+      url: '/pages/opening/opening?category=' + id
+    })
+  },
+
+  onGoProfile() {
+    wx.navigateTo({
+      url: '/pages/profile/profile'
     })
   }
 })

@@ -1,68 +1,5 @@
 const Xiangqi = require('../../utils/xiangqi')
 
-// 示例棋谱树：中炮对屏风马（用于验证严格棋谱模式逻辑链）
-// 实际项目应从本地 JSON 加载
-const SAMPLE_OPENING_TREE = {
-  move: '',
-  comment: '初始局面',
-  children: [
-    {
-      move: 'h2e2',
-      comment: '中炮（炮八平五）',
-      children: [
-        {
-          move: 'h9g7',
-          comment: '屏风马（马8进7）',
-          children: [
-            {
-              move: 'b0c2',
-              comment: '马二进三（主变正着）',
-              isMainLine: true,
-              children: [
-                {
-                  move: 'i9h9',
-                  comment: '车9平8',
-                  children: []
-                }
-              ]
-            },
-            {
-              move: 'e3e4',
-              comment: '兵五进一（变例）',
-              children: [
-                {
-                  move: 'e6e5',
-                  comment: '卒5进1',
-                  children: [
-                    {
-                      move: 'e4e5',
-                      comment: '兵吃卒',
-                      children: []
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              move: 'a0a2',
-              comment: '车九进二（典型错误）',
-              isTypicalError: true,
-              errorComment: '过早动车，易导致失先',
-              children: [
-                {
-                  move: 'i9i7',
-                  comment: '车1进2',
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-
 function buildNodeMap(node, parent = null) {
   node.parent = parent
   node.moveMap = {}
@@ -88,20 +25,73 @@ Page({
   openingTree: null,
   currentNode: null,
   isAiThinking: false,
+  isGameOver: false,
+  openingId: '',
+  userSide: 'red',
 
   onLoad(options) {
-    // 选项示例：{ side: 'red' | 'black' }
-    this.initGame(options.side || 'red')
+    const id = options.id || ''
+    const side = options.side === 'black' ? 'black' : 'red'
+    this.openingId = id
+    this.userSide = side
+    this.loadOpeningData(id, side)
   },
 
   onReady() {
     this.board = this.selectComponent('#board')
   },
 
-  initGame(side) {
+  loadOpeningData(id, side) {
+    if (!id) {
+      wx.showToast({ title: '缺少开局ID', icon: 'none' })
+      setTimeout(() => wx.navigateBack(), 1500)
+      return
+    }
+
+    const fs = wx.getFileSystemManager()
+    let data = null
+    try {
+      const content = fs.readFileSync('/data/openings/' + id + '.json', 'utf8')
+      data = JSON.parse(content)
+    } catch (e) {
+      // 同步读取失败，稍后尝试异步请求
+    }
+
+    if (data) {
+      this.initGameWithData(data, side)
+      return
+    }
+
+    wx.request({
+      url: '/data/openings/' + id + '.json',
+      success: (res) => {
+        if (res.statusCode === 200 && res.data) {
+          this.initGameWithData(res.data, side)
+        } else {
+          wx.showToast({ title: '加载棋谱失败', icon: 'none' })
+          setTimeout(() => wx.navigateBack(), 1500)
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '加载棋谱失败', icon: 'none' })
+        setTimeout(() => wx.navigateBack(), 1500)
+      }
+    })
+  },
+
+  initGameWithData(data, side) {
+    const tree = data.tree
+    const meta = data.meta || {}
+    wx.setNavigationBarTitle({ title: meta.name || '棋谱练习' })
+    this.rawTree = tree
+    this.initGame(side, tree)
+  },
+
+  initGame(side, tree) {
     this.engine = new Xiangqi()
-    this.openingTree = buildNodeMap(JSON.parse(JSON.stringify(SAMPLE_OPENING_TREE)))
+    this.openingTree = buildNodeMap(JSON.parse(JSON.stringify(tree || {})))
     this.currentNode = this.openingTree
+    this.isGameOver = false
 
     const orientation = side === 'black' ? 'black' : 'red'
     this.setData({
@@ -129,9 +119,15 @@ Page({
     return color + '走'
   },
 
+  getStatusText() {
+    const hasChildren = this.currentNode && this.currentNode.children && this.currentNode.children.length > 0
+    if (!hasChildren) return '棋谱练习已结束'
+    return this.currentNode.comment || ''
+  },
+
   // 核心：严格棋谱模式走子验证
   onBeforeDrop(e) {
-    if (this.isAiThinking) {
+    if (this.isAiThinking || this.isGameOver) {
       e.detail.prevent()
       return
     }
@@ -191,7 +187,7 @@ Page({
     this.currentNode = branch
     this.setData({
       turnText: this.getTurnText(),
-      statusText: branch.comment || '',
+      statusText: this.getStatusText(),
       allowedMoves: this.getAllowedMoves()
     })
 
@@ -215,6 +211,7 @@ Page({
   playAiMove() {
     if (!this.currentNode.children || this.currentNode.children.length === 0) {
       // 棋谱结束，检查胜负
+      this.isGameOver = true
       this.checkGameOver()
       return
     }
@@ -235,7 +232,7 @@ Page({
     this.currentNode = aiBranch
     this.setData({
       turnText: this.getTurnText(),
-      statusText: aiBranch.comment || '',
+      statusText: this.getStatusText(),
       lastMove: { source: from, target: to },
       allowedMoves: this.getAllowedMoves()
     })
@@ -244,24 +241,30 @@ Page({
   checkGameOver() {
     const isOpeningEnd = !this.currentNode.children || this.currentNode.children.length === 0
     if (this.engine.game_over() || isOpeningEnd) {
+      this.isGameOver = true
       let result = ''
       if (this.engine.in_checkmate()) {
         result = this.engine.turn() === 'r' ? '黑方胜' : '红方胜'
       } else if (this.engine.in_draw()) {
         result = '和棋'
       } else if (isOpeningEnd) {
-        result = '棋谱练习结束'
+        result = '你已经完成了本开局的主变练习'
       } else {
         result = '对局结束'
       }
 
+      const title = isOpeningEnd ? '棋谱练习结束' : '对局结束'
       wx.showModal({
-        title: '对局结束',
+        title,
         content: result,
-        showCancel: false,
         confirmText: '重新练习',
-        success: () => {
-          this.onRestart()
+        cancelText: '返回首页',
+        success: (res) => {
+          if (res.confirm) {
+            this.onRestart()
+          } else {
+            wx.redirectTo({ url: '/pages/index/index' })
+          }
         }
       })
     }
@@ -293,17 +296,19 @@ Page({
       this.currentNode = this.openingTree
     }
 
+    this.isGameOver = false
+
     this.setData({
       position: fen,
       turnText: this.getTurnText(),
-      statusText: this.currentNode.comment || '',
+      statusText: this.getStatusText(),
       lastMove: null,
       allowedMoves: this.getAllowedMoves()
     })
   },
 
   onRestart() {
-    this.initGame(this.data.orientation === 'red' ? 'red' : 'black')
+    this.initGame(this.userSide, this.rawTree)
     const fen = this.engine.fen().split(' ')[0]
     if (this.board) {
       this.board.position(fen, false)
@@ -317,6 +322,6 @@ Page({
   },
 
   onBack() {
-    wx.navigateBack()
+    wx.switchTab({ url: '/pages/index/index' })
   }
 })

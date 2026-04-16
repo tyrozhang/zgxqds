@@ -1,33 +1,90 @@
 .container {
-  padding: 20rpx;
+  min-height: 100vh;
+  background: #f5f0e8;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 60rpx;
+}
+
+.header-top {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
 }
 
-.board-wrapper {
-  width: 100%;
-  max-width: 750rpx;
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #8B4513;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
   background: #fff;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  border-radius: 32rpx;
+  padding: 8rpx 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(139, 69, 19, 0.08);
 }
 
-.controls {
-  margin-top: 30rpx;
+.mini-avatar {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  margin-right: 10rpx;
+}
+
+.mini-name {
+  font-size: 24rpx;
+  color: #5c3a1e;
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-login {
+  font-size: 24rpx;
+  color: #8B4513;
+}
+
+.subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #a67c52;
+}
+
+.grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 16rpx;
+  justify-content: space-between;
 }
 
-.controls button {
-  margin: 0;
+.card {
+  width: 46%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(139, 69, 19, 0.08);
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.status {
-  margin-top: 20rpx;
-  font-size: 28rpx;
-  color: #666;
+.card-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #5c3a1e;
+  margin-bottom: 12rpx;
+}
+
+.card-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #a67c52;
 }

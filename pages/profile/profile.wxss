@@ -1,0 +1,83 @@
+.container {
+  min-height: 100vh;
+  background: #f5f0e8;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 48rpx 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(139, 69, 19, 0.08);
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  margin-bottom: 24rpx;
+}
+
+.avatar.placeholder {
+  background: #ddd;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #5c3a1e;
+}
+
+.login-btn {
+  font-size: 30rpx;
+  background: #8B4513;
+  color: #fff;
+  border-radius: 8rpx;
+  padding: 12rpx 32rpx;
+  margin: 0;
+}
+
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(139, 69, 19, 0.06);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #5c3a1e;
+  margin-bottom: 16rpx;
+}
+
+.list-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.empty {
+  font-size: 28rpx;
+  color: #999;
+  padding: 20rpx 0;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30rpx;
+  color: #333;
+  padding: 16rpx 0;
+}
