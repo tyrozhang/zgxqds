@@ -27,7 +27,11 @@ function getPositionFromPath(path) {
     if (!m) continue
     const from = m.slice(0, 2)
     const to = m.slice(2, 4)
-    engine.move({ from, to })
+    const result = engine.move({ from, to })
+    if (!result) {
+      console.error('Illegal move in path:', m)
+      break
+    }
   }
   return engine.fen().split(' ')[0]
 }
@@ -203,5 +207,7 @@ Page({
 
   onBack() {
     wx.navigateBack()
-  }
+  },
+
+  noop() {}
 })

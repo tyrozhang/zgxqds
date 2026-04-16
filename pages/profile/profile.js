@@ -67,30 +67,26 @@ Page({
     }
   },
 
-  onLogin() {
-    wx.getUserProfile({
-      desc: '用于完善用户资料',
-      success: (res) => {
-        const profile = res.userInfo || {}
-        wx.login({
-          success: (loginRes) => {
-            const userData = wx.getStorageSync('userData') || {}
-            userData.nickName = profile.nickName || ''
-            userData.avatarUrl = profile.avatarUrl || ''
-            userData.openid = 'mock_openid_' + (loginRes.code || '001')
-            wx.setStorageSync('userData', userData)
-            this.setData({
-              userInfo: userData,
-              hasUserInfo: true
-            })
-          },
-          fail: () => {
-            wx.showToast({ title: '登录失败', icon: 'none' })
-          }
+  onGetUserInfo(e) {
+    const profile = e.detail.userInfo || {}
+    if (!profile.nickName) {
+      wx.showToast({ title: '需要授权才能登录', icon: 'none' })
+      return
+    }
+    wx.login({
+      success: (loginRes) => {
+        const userData = wx.getStorageSync('userData') || {}
+        userData.nickName = profile.nickName || ''
+        userData.avatarUrl = profile.avatarUrl || ''
+        userData.openid = 'mock_openid_' + (loginRes.code || '001')
+        wx.setStorageSync('userData', userData)
+        this.setData({
+          userInfo: userData,
+          hasUserInfo: true
         })
       },
       fail: () => {
-        wx.showToast({ title: '需要授权才能登录', icon: 'none' })
+        wx.showToast({ title: '登录失败', icon: 'none' })
       }
     })
   },

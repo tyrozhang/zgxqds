@@ -83,6 +83,7 @@ Page({
     const tree = data.tree
     const meta = data.meta || {}
     wx.setNavigationBarTitle({ title: meta.name || '棋谱练习' })
+    this.rawTree = tree
     this.initGame(side, tree)
   },
 
@@ -262,7 +263,7 @@ Page({
           if (res.confirm) {
             this.onRestart()
           } else {
-            wx.switchTab({ url: '/pages/index/index' })
+            wx.redirectTo({ url: '/pages/index/index' })
           }
         }
       })
@@ -307,7 +308,7 @@ Page({
   },
 
   onRestart() {
-    this.initGame(this.userSide, this.openingTree)
+    this.initGame(this.userSide, this.rawTree)
     const fen = this.engine.fen().split(' ')[0]
     if (this.board) {
       this.board.position(fen, false)

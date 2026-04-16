@@ -3,7 +3,7 @@
     <image wx:if="{{hasUserInfo}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
     <view wx:else class="avatar placeholder"></view>
     <text wx:if="{{hasUserInfo}}" class="nickname">{{userInfo.nickName}}</text>
-    <button wx:else class="login-btn" bindtap="onLogin">点击登录</button>
+    <button wx:else class="login-btn" open-type="getUserInfo" bind:getuserinfo="onGetUserInfo">点击登录</button>
   </view>
 
   <view class="section">
