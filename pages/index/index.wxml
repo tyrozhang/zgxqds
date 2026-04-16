@@ -1,6 +1,13 @@
 <view class="container">
   <view class="header">
-    <text class="title">中国象棋·开局大师</text>
+    <view class="header-top">
+      <text class="title">中国象棋·开局大师</text>
+      <view class="user-badge" bindtap="onGoProfile">
+        <image wx:if="{{hasUserInfo}}" class="mini-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <text wx:if="{{hasUserInfo}}" class="mini-name">{{userInfo.nickName}}</text>
+        <text wx:else class="mini-login">登录</text>
+      </view>
+    </view>
     <text class="subtitle">选择开局体系，开始练习</text>
   </view>
 

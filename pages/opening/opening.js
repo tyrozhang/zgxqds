@@ -90,7 +90,12 @@ Page({
       this.setData({ categoryName: '未知体系', openings: [] })
       return
     }
-    const openings = cat.openings || []
+    const userData = wx.getStorageSync('userData') || {}
+    const unlocked = userData.unlockedOpenings || []
+    const openings = (cat.openings || []).map(o => ({
+      ...o,
+      locked: o.locked && !unlocked.includes(o.id)
+    }))
     let selectedIndex = openings.findIndex(o => !o.locked)
     if (selectedIndex < 0) selectedIndex = 0
     this.setData({
@@ -173,7 +178,27 @@ Page({
   },
 
   onUnlock() {
-    wx.showToast({ title: '解锁功能即将上线', icon: 'none' })
+    const index = this.data.selectedIndex
+    const opening = this.data.openings[index]
+    if (!opening) return
+    wx.showModal({
+      title: '解锁开局',
+      content: '确认支付解锁 "' + opening.name + '"？',
+      success: (res) => {
+        if (res.confirm) {
+          const userData = wx.getStorageSync('userData') || {}
+          userData.unlockedOpenings = userData.unlockedOpenings || []
+          if (!userData.unlockedOpenings.includes(opening.id)) {
+            userData.unlockedOpenings.push(opening.id)
+          }
+          wx.setStorageSync('userData', userData)
+          this.setData({
+            ['openings[' + index + '].locked']: false
+          })
+          wx.showToast({ title: '解锁成功', icon: 'success' })
+        }
+      }
+    })
   },
 
   onBack() {
