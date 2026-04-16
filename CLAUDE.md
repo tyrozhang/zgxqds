@@ -24,7 +24,7 @@
 
 **所有涉及代码修改的任务，必须在 git worktree 隔离空间中进行。**
 
-- 创建 worktree 前，优先使用项目已有的 `.worktrees/` 或 `worktrees/` 目录。
+- 所有 worktree 统一创建在 `.claude/worktrees/` 目录下。
 - 禁止直接在 `master` 分支上修改代码或执行多步骤实现计划。
 - 纯查询类任务（如查看代码、解释逻辑）可不必使用 worktree。
 
