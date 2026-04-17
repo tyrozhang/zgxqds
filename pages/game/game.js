@@ -269,7 +269,9 @@ Page({
       return
     }
 
-    const aiBranch = this.currentNode.children.find(c => c.isMainLine) || this.currentNode.children[0]
+    // 随机选择一个分支
+    const randomIdx = Math.floor(Math.random() * this.currentNode.children.length)
+    const aiBranch = this.currentNode.children[randomIdx]
     const moveKey = aiBranch.move
     const from = moveKey.slice(0, 2)
     const to = moveKey.slice(2, 4)
