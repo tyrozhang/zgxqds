@@ -1,5 +1,52 @@
 const Xiangqi = require('../../utils/xiangqi')
 
+function convertNewFormatToTree(data) {
+  if (!data.moves || !data.moves.length) return null
+
+  function buildNode(moves, isMainLine, startIdx) {
+    const node = moves[startIdx]
+    let comment = node.comment || ''
+    if (node.eval) {
+      comment += (comment ? '\n' : '') + 'eval: ' + node.eval
+    }
+
+    const result = {
+      move: node.move,
+      san: node.san,
+      isMainLine,
+      children: [],
+      comment
+    }
+
+    if (node.tags) {
+      if (node.tags.includes('bad') || node.tags.includes('principle_violation') || node.tags.includes('error')) {
+        result.isTypicalError = true
+        result.errorComment = node.comment || ''
+      }
+    }
+
+    if (node.branches && node.branches.length) {
+      for (const branch of node.branches) {
+        const branchMoves = branch.moves
+        if (!branchMoves || !branchMoves.length) continue
+        const branchRoot = buildNode(branchMoves, false, 0)
+        if (branch.label) {
+          branchRoot.comment = '【' + branch.label + '】' + (branchRoot.comment ? ' ' + branchRoot.comment : '')
+        }
+        result.children.push(branchRoot)
+      }
+    }
+
+    if (startIdx + 1 < moves.length) {
+      result.children.push(buildNode(moves, isMainLine, startIdx + 1))
+    }
+
+    return result
+  }
+
+  return buildNode(data.moves, true, 0)
+}
+
 function buildNodeMap(node, parent = null) {
   node.parent = parent
   node.moveMap = {}
@@ -80,7 +127,7 @@ Page({
   },
 
   initGameWithData(data, side) {
-    const tree = data.tree
+    const tree = data.tree || convertNewFormatToTree(data)
     const meta = data.meta || {}
     wx.setNavigationBarTitle({ title: meta.name || '棋谱练习' })
     this.rawTree = tree
@@ -93,6 +140,13 @@ Page({
     this.currentNode = this.openingTree
     this.isGameOver = false
 
+    // 若树根有首着（红方先手），先自动执行
+    if (this.openingTree && this.openingTree.move) {
+      const from = this.openingTree.move.slice(0, 2)
+      const to = this.openingTree.move.slice(2, 4)
+      this.engine.move({ from, to })
+    }
+
     const orientation = side === 'black' ? 'black' : 'red'
     this.setData({
       position: this.engine.fen().split(' ')[0],
@@ -102,7 +156,7 @@ Page({
       allowedMoves: this.getAllowedMoves()
     })
 
-    // 若用户选择后手，AI（红方）先走
+    // 若用户选择后手，AI（黑方）再走一步
     if (side === 'black') {
       this.playAiMove()
     }
@@ -216,13 +270,23 @@ Page({
       return
     }
 
-    const aiBranch = this.currentNode.children[0]
+    const aiBranch = this.currentNode.children.find(c => c.isMainLine) || this.currentNode.children[0]
     const moveKey = aiBranch.move
     const from = moveKey.slice(0, 2)
     const to = moveKey.slice(2, 4)
 
     // 更新引擎状态
-    this.engine.move({ from, to })
+    const moveResult = this.engine.move({ from, to })
+    if (!moveResult) {
+      console.error('[playAiMove] 棋谱数据存在非法走法:', aiBranch.san || moveKey)
+      this.isGameOver = true
+      this.setData({
+        statusText: '棋谱数据异常: ' + (aiBranch.san || moveKey),
+        allowedMoves: []
+      })
+      wx.showToast({ title: '棋谱数据异常', icon: 'none' })
+      return
+    }
 
     // 棋盘播放动画
     if (this.board) {
