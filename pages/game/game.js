@@ -129,11 +129,11 @@ Page({
       // 不要推进到 children[0]，否则只能走固定分支
     }
 
-    const orientation = side
+    this.board.orientation(side)
     const fen = this.engine.fen().split(' ')[0]
     this.setData({
       position: fen,
-      orientation,
+      side,
       turnText: this.getTurnText(),
       statusText: '',
       allowedMoves: this.getAllowedMoves()
