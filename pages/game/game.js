@@ -1,4 +1,5 @@
 const Xiangqi = require('../../utils/xiangqi')
+const openingsData = require('../../data/openings/data')
 
 function convertNewFormatToTree(data) {
   if (!data.moves || !data.moves.length) return null
@@ -95,35 +96,13 @@ Page({
       return
     }
 
-    const fs = wx.getFileSystemManager()
-    let data = null
-    try {
-      const content = fs.readFileSync('/data/openings/' + id + '.json', 'utf8')
-      data = JSON.parse(content)
-    } catch (e) {
-      // 同步读取失败，稍后尝试异步请求
+    const openingData = openingsData.openings[id]
+    if (openingData) {
+      this.initGameWithData(openingData, side)
+    } else {
+      wx.showToast({ title: '加载棋谱失败', icon: 'none' })
+      setTimeout(() => wx.navigateBack(), 1500)
     }
-
-    if (data) {
-      this.initGameWithData(data, side)
-      return
-    }
-
-    wx.request({
-      url: '/data/openings/' + id + '.json',
-      success: (res) => {
-        if (res.statusCode === 200 && res.data) {
-          this.initGameWithData(res.data, side)
-        } else {
-          wx.showToast({ title: '加载棋谱失败', icon: 'none' })
-          setTimeout(() => wx.navigateBack(), 1500)
-        }
-      },
-      fail: () => {
-        wx.showToast({ title: '加载棋谱失败', icon: 'none' })
-        setTimeout(() => wx.navigateBack(), 1500)
-      }
-    })
   },
 
   initGameWithData(data, side) {
@@ -148,13 +127,19 @@ Page({
     }
 
     const orientation = side === 'black' ? 'black' : 'red'
+    const fen = this.engine.fen().split(' ')[0]
     this.setData({
-      position: this.engine.fen().split(' ')[0],
+      position: fen,
       orientation,
       turnText: this.getTurnText(),
       statusText: '',
       allowedMoves: this.getAllowedMoves()
     })
+
+    // 确保 board 与引擎状态同步
+    if (this.board) {
+      this.board.position(fen, false)
+    }
 
     // 若用户选择后手，AI（黑方）再走一步
     if (side === 'black') {

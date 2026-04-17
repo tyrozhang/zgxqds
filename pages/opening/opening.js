@@ -170,7 +170,9 @@ Page({
     let node = tree
     for (let i = 0; i < path.length; i++) {
       const p = path[i]
+      if (!node.children) return
       node = node.children.find(c => c.move === p)
+      if (!node) return
     }
     if (node) {
       node.expanded = !node.expanded
@@ -186,7 +188,9 @@ Page({
     let node = tree
     for (let i = 0; i < path.length; i++) {
       const p = path[i]
+      if (!node.children) return
       node = node.children.find(c => c.move === p)
+      if (!node) return
     }
     this.setData({
       preview: {
