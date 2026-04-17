@@ -125,10 +125,8 @@ Page({
       const from = this.openingTree.move.slice(0, 2)
       const to = this.openingTree.move.slice(2, 4)
       this.engine.move({ from, to })
-      // 推进 currentNode 到子节点，让用户走黑方的棋
-      if (this.openingTree.children && this.openingTree.children.length > 0) {
-        this.currentNode = this.openingTree.children[0]
-      }
+      // 保持 currentNode 在根节点，让用户可以选择任意分支（飞象局/起马局/挺卒局）
+      // 不要推进到 children[0]，否则只能走固定分支
     }
 
     const orientation = side
