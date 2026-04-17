@@ -119,8 +119,9 @@ Page({
     this.currentNode = this.openingTree
     this.isGameOver = false
 
-    // 若树根有首着（红方先手），先自动执行
-    if (this.openingTree && this.openingTree.move) {
+    // 若用户选择后手（执黑），需先自动执行红方的第一步开局
+    // 执红时，用户应自行走第一步，不应自动执行
+    if (side === 'black' && this.openingTree && this.openingTree.move) {
       const from = this.openingTree.move.slice(0, 2)
       const to = this.openingTree.move.slice(2, 4)
       this.engine.move({ from, to })
@@ -149,6 +150,13 @@ Page({
 
   getAllowedMoves() {
     if (!this.currentNode || !this.currentNode.moveMap) return []
+
+    // 如果当前是树的根节点（开局位置），且轮到红方走，
+    // 说明第一步还未走，getAllowedMoves 应该返回第一步走法
+    if (this.currentNode === this.openingTree && this.engine.turn() === 'r') {
+      return [this.currentNode.move]
+    }
+
     return Object.keys(this.currentNode.moveMap)
   },
 
@@ -198,7 +206,13 @@ Page({
     }
 
     // 2. 棋谱树匹配
-    const branch = this.currentNode.moveMap[moveKey]
+    // 注意：根节点自己的 move（如 h2e2）不在 moveMap 中，而是存储在 currentNode.move
+    // 如果 moveKey 匹配 currentNode.move，说明要走的是当前节点的走法（用于首步或切换分支）
+    let branch = this.currentNode.moveMap[moveKey]
+    if (!branch && this.currentNode.move === moveKey) {
+      // 走的是当前节点的走法本身
+      branch = this.currentNode
+    }
 
     if (!branch) {
       // 非棋谱走法
