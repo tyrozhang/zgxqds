@@ -15,9 +15,17 @@
 ## 对话要求
 全程使用中文进行对话。
 
-## 可引用文档
+## 需求文档
 
-**需求文档:** .\docs\requirement.md
+.\docs\requirement.md
+
+## 引入的第三方组件和库
+
+第三方中国象棋棋盘组件:  .\components\xiangqiboard\xiangqiboard.js
+
+第三方中国象棋引擎库:  .\utils\xiangqi.js
+
+**修改第三方库相关源码要经过我的同意** 
 
 ---
 ## 工作流约定
