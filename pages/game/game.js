@@ -82,11 +82,11 @@ Page({
     const side = options.side === 'black' ? 'black' : 'red'
     this.openingId = id
     this.userSide = side
-    this.loadOpeningData(id, side)
   },
 
   onReady() {
     this.board = this.selectComponent('#board')
+    this.loadOpeningData(this.openingId, this.userSide)
   },
 
   loadOpeningData(id, side) {
@@ -125,9 +125,13 @@ Page({
       const from = this.openingTree.move.slice(0, 2)
       const to = this.openingTree.move.slice(2, 4)
       this.engine.move({ from, to })
+      // 推进 currentNode 到子节点，让用户走黑方的棋
+      if (this.openingTree.children && this.openingTree.children.length > 0) {
+        this.currentNode = this.openingTree.children[0]
+      }
     }
 
-    const orientation = side === 'black' ? 'black' : 'red'
+    const orientation = side
     const fen = this.engine.fen().split(' ')[0]
     this.setData({
       position: fen,
@@ -140,11 +144,6 @@ Page({
     // 确保 board 与引擎状态同步
     if (this.board) {
       this.board.position(fen, false)
-    }
-
-    // 若用户选择后手，AI（黑方）再走一步
-    if (side === 'black') {
-      this.playAiMove()
     }
   },
 
