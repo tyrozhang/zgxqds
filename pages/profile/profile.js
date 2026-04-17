@@ -33,38 +33,16 @@ Page({
       this.setData({ unlockedList: [] })
       return
     }
-    const fs = wx.getFileSystemManager()
-    try {
-      const content = fs.readFileSync('/data/openings/index.json', 'utf8')
-      const data = JSON.parse(content)
-      const list = []
-      data.categories.forEach(cat => {
-        (cat.openings || []).forEach(o => {
-          if (unlocked.includes(o.id)) {
-            list.push({ id: o.id, name: o.name })
-          }
-        })
-      })
-      this.setData({ unlockedList: list })
-    } catch (e) {
-      wx.request({
-        url: '/data/openings/index.json',
-        success: (res) => {
-          if (res.statusCode === 200) {
-            const data = res.data
-            const list = []
-            data.categories.forEach(cat => {
-              (cat.openings || []).forEach(o => {
-                if (unlocked.includes(o.id)) {
-                  list.push({ id: o.id, name: o.name })
-                }
-              })
-            })
-            this.setData({ unlockedList: list })
-          }
+    const { categories } = require('../../data/openings/data.js')
+    const list = []
+    categories.forEach(cat => {
+      (cat.openings || []).forEach(o => {
+        if (unlocked.includes(o.id)) {
+          list.push({ id: o.id, name: o.name })
         }
       })
-    }
+    })
+    this.setData({ unlockedList: list })
   },
 
   onGetUserInfo(e) {
