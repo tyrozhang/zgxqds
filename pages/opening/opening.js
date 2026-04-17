@@ -1,4 +1,52 @@
 const Xiangqi = require('../../utils/xiangqi')
+const { openings: allOpenings, categories } = require('../../data/openings/data')
+
+function convertNewFormatToTree(data) {
+  if (!data.moves || !data.moves.length) return null
+
+  function buildNode(moves, isMainLine, startIdx) {
+    const node = moves[startIdx]
+    let comment = node.comment || ''
+    if (node.eval) {
+      comment += (comment ? '\n' : '') + 'eval: ' + node.eval
+    }
+
+    const result = {
+      move: node.move,
+      san: node.san,
+      isMainLine,
+      children: [],
+      comment
+    }
+
+    if (node.tags) {
+      if (node.tags.includes('bad') || node.tags.includes('principle_violation') || node.tags.includes('error')) {
+        result.isTypicalError = true
+        result.errorComment = node.comment || ''
+      }
+    }
+
+    if (node.branches && node.branches.length) {
+      for (const branch of node.branches) {
+        const branchMoves = branch.moves
+        if (!branchMoves || !branchMoves.length) continue
+        const branchRoot = buildNode(branchMoves, false, 0)
+        if (branch.label) {
+          branchRoot.comment = '【' + branch.label + '】' + (branchRoot.comment ? ' ' + branchRoot.comment : '')
+        }
+        result.children.push(branchRoot)
+      }
+    }
+
+    if (startIdx + 1 < moves.length) {
+      result.children.push(buildNode(moves, isMainLine, startIdx + 1))
+    }
+
+    return result
+  }
+
+  return buildNode(data.moves, true, 0)
+}
 
 function flattenTree(node, path = [], depth = 0) {
   const item = {
@@ -68,24 +116,7 @@ Page({
   },
 
   loadData(category) {
-    const fs = wx.getFileSystemManager()
-    try {
-      const content = fs.readFileSync('/data/openings/index.json', 'utf8')
-      const data = JSON.parse(content)
-      this.processIndex(data, category)
-    } catch (e) {
-      wx.request({
-        url: '/data/openings/index.json',
-        success: (res) => {
-          if (res.statusCode === 200) {
-            this.processIndex(res.data, category)
-          }
-        },
-        fail: () => {
-          wx.showToast({ title: '加载数据失败', icon: 'none' })
-        }
-      })
-    }
+    this.processIndex({ categories }, category)
   },
 
   processIndex(data, category) {
@@ -113,15 +144,14 @@ Page({
   },
 
   loadOpeningTree(openingId) {
-    const fs = wx.getFileSystemManager()
-    try {
-      const content = fs.readFileSync('/data/openings/' + openingId + '.json', 'utf8')
-      const data = JSON.parse(content)
-      const tree = flattenTree(data.tree)
-      this.setData({ tree })
-    } catch (e) {
+    const openingData = allOpenings[openingId]
+    if (!openingData) {
       this.setData({ tree: null })
+      return
     }
+    const rawTree = openingData.tree || convertNewFormatToTree(openingData)
+    const tree = flattenTree(rawTree)
+    this.setData({ tree })
   },
 
   onSelectVariation(e) {
