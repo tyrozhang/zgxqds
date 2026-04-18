@@ -56,7 +56,8 @@
 }
 
 .tab-icon {
-  font-size: 36rpx;
+  width: 60rpx;
+  height: 60rpx;
   margin-bottom: 8rpx;
 }
 

@@ -14,7 +14,8 @@
         data-index="{{index}}"
         bindtap="onSelectCategory"
       >
-        <text class="tab-icon">{{item.icon || '📂'}}</text>
+        <image wx:if="{{item.icon}}" class="tab-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text wx:else class="tab-icon">📂</text>
         <text class="tab-name">{{item.name}}</text>
       </view>
     </view>

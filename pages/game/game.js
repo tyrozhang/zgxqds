@@ -147,7 +147,13 @@ Page({
       // 不要推进到 children[0]，否则只能走固定分支
     }
 
-    this.board.orientation(side)
+    // 确保 board 组件已加载（页面返回再进入时 onReady 可能不触发）
+    if (!this.board) {
+      this.board = this.selectComponent('#board')
+    }
+    if (this.board) {
+      this.board.orientation(side)
+    }
     const fen = this.engine.fen().split(' ')[0]
     this.setData({
       position: fen,
