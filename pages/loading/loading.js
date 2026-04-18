@@ -2,7 +2,7 @@ Page({
   onLoad() {
     this.initStorage()
     setTimeout(() => {
-      wx.redirectTo({ url: '/pages/index/index' })
+      wx.redirectTo({ url: '/pages/opening/opening' })
     }, 800)
   },
 

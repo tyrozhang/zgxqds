@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/loading/loading",
-    "pages/index/index",
     "pages/opening/opening",
     "pages/game/game",
     "pages/profile/profile"
