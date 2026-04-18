@@ -100,10 +100,8 @@ Page({
     const side = e.currentTarget.dataset.side
     this.userSide = side
     this.setData({ practiceState: 'playing' })
-    // 确保 board 组件已加载
-    if (!this.board) {
-      this.board = this.selectComponent('#board')
-    }
+    // 每次都重新获取 board 组件引用，因为 practiceState=select 时 board 会被销毁
+    this.board = this.selectComponent('#board')
     this.initGame(side, this.rawTree)
   },
 
@@ -147,7 +145,13 @@ Page({
       // 不要推进到 children[0]，否则只能走固定分支
     }
 
-    this.board.orientation(side)
+    // 确保 board 组件已加载（页面返回再进入时 onReady 可能不触发）
+    if (!this.board) {
+      this.board = this.selectComponent('#board')
+    }
+    if (this.board) {
+      this.board.orientation(side)
+    }
     const fen = this.engine.fen().split(' ')[0]
     this.setData({
       position: fen,
