@@ -66,7 +66,9 @@ Page({
     orientation: 'red',
     turnText: '红方走',
     statusText: '',
-    allowedMoves: []
+    allowedMoves: [],
+    mode: 'practice',
+    practiceState: 'select'
   },
 
   engine: null,
@@ -87,6 +89,22 @@ Page({
   onReady() {
     this.board = this.selectComponent('#board')
     this.loadOpeningData(this.openingId, this.userSide)
+  },
+
+  onSwitchMode(e) {
+    const mode = e.currentTarget.dataset.mode
+    this.setData({ mode })
+  },
+
+  onSelectPracticeSide(e) {
+    const side = e.currentTarget.dataset.side
+    this.userSide = side
+    this.setData({ practiceState: 'playing' })
+    // 确保 board 组件已加载
+    if (!this.board) {
+      this.board = this.selectComponent('#board')
+    }
+    this.initGame(side, this.rawTree)
   },
 
   loadOpeningData(id, side) {
@@ -370,16 +388,27 @@ Page({
   },
 
   onRestart() {
-    this.initGame(this.userSide, this.rawTree)
+    // 重置引擎状态
+    if (this.engine) {
+      this.engine = new Xiangqi()
+    }
+    if (this.openingTree) {
+      this.currentNode = this.openingTree
+    }
+    this.isGameOver = false
+    this.isAiThinking = false
+
     const fen = this.engine.fen().split(' ')[0]
     if (this.board) {
       this.board.position(fen, false)
+      this.board.orientation(this.userSide)
     }
     this.setData({
       position: fen,
+      practiceState: 'select',
       statusText: '',
       lastMove: null,
-      allowedMoves: this.getAllowedMoves()
+      allowedMoves: []
     })
   },
 

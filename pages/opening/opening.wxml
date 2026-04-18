@@ -1,77 +1,48 @@
 <view class="page">
   <view class="header-bar">
-    <text class="back" bindtap="onBack">← 返回</text>
-    <text class="title">{{categoryName}}</text>
+    <text class="placeholder"></text>
+    <text class="title">中国象棋·开局大师</text>
     <text class="placeholder"></text>
   </view>
 
   <view class="main">
     <view class="sidebar">
       <view
-        class="var-item {{selectedIndex === index ? 'active' : ''}}"
+        class="tab-item {{selectedCategoryIndex === index ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-index="{{index}}"
+        bindtap="onSelectCategory"
+      >
+        <text class="tab-icon">{{item.icon || '📂'}}</text>
+        <text class="tab-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="content">
+      <view
+        class="opening-item"
         wx:for="{{openings}}"
         wx:key="id"
         data-index="{{index}}"
-        bindtap="onSelectVariation"
+        bindtap="onSelectOpening"
       >
-        <text class="var-name">{{item.name}}</text>
-        <text class="var-lock">{{item.locked ? '🔒' : ''}}</text>
+        <view class="opening-thumb">
+          <image
+            wx:if="{{item.image}}"
+            src="{{item.image}}"
+            mode="aspectFill"
+            class="thumb-img"
+          ></image>
+          <view wx:else class="thumb-placeholder">棋谱图</view>
+        </view>
+        <view class="opening-info">
+          <text class="opening-name">{{item.name}}</text>
+          <text class="opening-desc">{{item.description || ''}}</text>
+        </view>
+        <text class="arrow">▶</text>
       </view>
       <view wx:if="{{!openings.length}}" class="empty">暂无数据</view>
-    </view>
-
-    <view class="detail">
-      <view class="video-box" wx:if="{{networkType !== 'none'}}">
-        <video
-          wx:if="{{openings[selectedIndex].videoUrl}}"
-          id="video"
-          src="{{openings[selectedIndex].videoUrl}}"
-          class="video"
-          controls
-        ></video>
-        <view wx:else class="video-placeholder">暂无教学视频</view>
-      </view>
-
-      <view class="actions">
-        <block wx:if="{{!openings[selectedIndex].locked}}">
-          <button class="btn btn-primary" data-side="red" bindtap="onPractice">执红练习</button>
-          <button class="btn btn-primary" data-side="black" bindtap="onPractice">执黑练习</button>
-        </block>
-        <block wx:else>
-          <button class="btn btn-lock" bindtap="onUnlock">解锁开局</button>
-        </block>
-      </view>
-
-      <scroll-view class="tree-scroll" scroll-y>
-        <view class="section-title">逐变讲解</view>
-        <view class="tree" wx:if="{{tree}}">
-          <include src="tree-node.wxml"/>
-        </view>
-      </scroll-view>
-
-      <view class="intro">
-        <view class="section-title">变例简介</view>
-        <text class="intro-text">{{openings[selectedIndex].description || '暂无简介'}}</text>
-      </view>
-    </view>
-  </view>
-
-  <view class="mask {{preview.show ? 'show' : ''}}" bindtap="onClosePreview">
-    <view class="preview-panel" catchtap="noop">
-      <view class="preview-header">
-        <text class="preview-title">{{preview.san || '局面预览'}}</text>
-        <text class="preview-close" bindtap="onClosePreview">✕</text>
-      </view>
-      <view class="preview-board">
-        <xiangqiboard
-          position="{{preview.position}}"
-          orientation="red"
-          draggable="{{false}}"
-        ></xiangqiboard>
-      </view>
-      <view class="preview-comment" wx:if="{{preview.comment}}">
-        <text>{{preview.comment}}</text>
-      </view>
     </view>
   </view>
 </view>

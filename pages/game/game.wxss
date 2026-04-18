@@ -3,6 +3,78 @@
   flex-direction: column;
   align-items: center;
   padding: 20rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 120rpx;
+}
+
+/* 模式选择区域 */
+.mode-select {
+  width: 100%;
+  padding: 20rpx 0;
+}
+
+.mode-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+  justify-content: center;
+}
+
+/* 练习选择界面 */
+.practice-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  padding: 60rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.practice-select-title {
+  font-size: 36rpx;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 60rpx;
+}
+
+.practice-select-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.practice-side-btn {
+  width: 240rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: #8B4513;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 8rpx;
+}
+
+.practice-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.hint-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 练习进行中 */
+.practice-playing {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .board-wrapper {
@@ -57,5 +129,36 @@
 .hint-moves {
   font-size: 26rpx;
   color: #07c160;
+  font-weight: bold;
+}
+
+/* 底部导航按钮 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-top: 1rpx solid #e5e5e5;
+  padding: 16rpx 0;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.nav-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  background-color: #fff;
+  border: none;
+  border-radius: 0;
+}
+
+.nav-btn.active {
+  color: #8B4513;
   font-weight: bold;
 }

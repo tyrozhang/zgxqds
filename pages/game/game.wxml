@@ -1,5 +1,19 @@
 <view class="container">
-  <view class="board-wrapper">
+  <!-- 选择执红/执黑界面 -->
+  <view wx:if="{{practiceState === 'select'}}" class="practice-select">
+    <view class="practice-select-title">请选择练习方式</view>
+    <view class="practice-select-buttons">
+      <button class="practice-side-btn" bindtap="onSelectPracticeSide" data-side="red">执红练习</button>
+      <button class="practice-side-btn" bindtap="onSelectPracticeSide" data-side="black">执黑练习</button>
+    </view>
+    <view class="practice-hints">
+      <text class="hint-text">执红：您走第一步，黑方按棋谱应法</text>
+      <text class="hint-text">执黑：AI替您走第一步，您从第二步开始</text>
+    </view>
+  </view>
+
+  <!-- 棋盘区域（始终渲染，但仅在 playing 时显示） -->
+  <view wx:elif="{{practiceState === 'playing'}}" class="board-wrapper">
     <xiangqiboard
       id="board"
       position="{{position}}"
@@ -13,19 +27,26 @@
     ></xiangqiboard>
   </view>
 
-  <view class="info-bar">
+  <!-- 底部信息栏（仅在 playing 时显示） -->
+  <view wx:if="{{practiceState === 'playing'}}" class="info-bar">
     <text class="turn-text">{{turnText}}</text>
     <text class="status-text" wx:if="{{statusText}}">{{statusText}}</text>
   </view>
 
-  <view class="hints" wx:if="{{allowedMoves.length > 0}}">
+  <view wx:if="{{practiceState === 'playing' && allowedMoves.length > 0}}" class="hints">
     <text class="hint-label">当前允许走法：</text>
     <text class="hint-moves">{{allowedMoves.join('、')}}</text>
   </view>
 
-  <view class="controls">
+  <view wx:if="{{practiceState === 'playing'}}" class="controls">
     <button size="mini" bindtap="onUndo">悔棋</button>
     <button size="mini" bindtap="onRestart">重新开始</button>
-    <button size="mini" bindtap="onBack">返回首页</button>
+  </view>
+
+  <!-- 底部三按钮 -->
+  <view class="bottom-nav">
+    <button class="nav-btn {{mode === 'video' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="video">看视频</button>
+    <button class="nav-btn {{mode === 'explain' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="explain">讲解</button>
+    <button class="nav-btn {{mode === 'practice' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="practice">练习</button>
   </view>
 </view>
