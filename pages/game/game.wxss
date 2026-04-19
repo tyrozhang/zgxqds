@@ -162,3 +162,30 @@
   color: #8B4513;
   font-weight: bold;
 }
+
+/* 讲解模式样式 */
+.explain-content {
+  width: 100%;
+  max-width: 720rpx;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: #f7f7f7;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+}
+
+.explain-step-info {
+  margin-bottom: 12rpx;
+}
+
+.step-text {
+  font-size: 26rpx;
+  color: #8B4513;
+  font-weight: bold;
+}
+
+.explain-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
