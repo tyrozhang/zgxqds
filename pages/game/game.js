@@ -126,12 +126,6 @@ Page({
     this.explainNodeList = []
     this.buildExplainNodeList(this.openingTree)
 
-    // 讲解模式默认红方视角
-    if (this.board) {
-      this.board.orientation('red')
-      this.board.position(this.engine.fen().split(' ')[0], false)
-    }
-
     this.explainCurrentIdx = 0
     const totalSteps = this.explainNodeList.length
 
@@ -145,10 +139,18 @@ Page({
       currentStep: 0,
       totalSteps: totalSteps,
       position: this.engine.fen().split(' ')[0],
+      orientation: 'red',
       turnText: '红方走',
       statusText: '',
       lastMove: null,
       allowedMoves: []
+    }, () => {
+      // 切换模式后棋盘组件会被重建，需在回调中重新获取引用
+      this.board = this.selectComponent('#board')
+      if (this.board) {
+        this.board.orientation('red')
+        this.board.position(this.engine.fen().split(' ')[0], false)
+      }
     })
   },
 
