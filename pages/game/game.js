@@ -68,7 +68,13 @@ Page({
     statusText: '',
     allowedMoves: [],
     mode: 'practice',
-    practiceState: 'select'
+    practiceState: 'select',
+    // 讲解模式相关
+    explainState: 'ready',
+    explainContent: '',
+    currentStep: 0,
+    totalSteps: 0,
+    lastMove: null
   },
 
   engine: null,
@@ -78,6 +84,9 @@ Page({
   isGameOver: false,
   openingId: '',
   userSide: 'red',
+  // 讲解模式专用
+  explainNodeList: [],
+  explainCurrentIdx: 0,
 
   onLoad(options) {
     const id = options.id || ''
@@ -93,7 +102,65 @@ Page({
 
   onSwitchMode(e) {
     const mode = e.currentTarget.dataset.mode
-    this.setData({ mode })
+    // 讲解模式切出时重置practiceState，确保切回练习模式时显示选择界面
+    if (this.data.mode === 'explain' && mode === 'practice') {
+      this.setData({ mode, practiceState: 'select' })
+    } else {
+      this.setData({ mode })
+    }
+    if (mode === 'explain') {
+      this.initExplainMode()
+    }
+  },
+
+  // 初始化讲解模式
+  initExplainMode() {
+    if (!this.rawTree) return
+
+    this.engine = new Xiangqi()
+    this.openingTree = buildNodeMap(JSON.parse(JSON.stringify(this.rawTree)))
+    this.currentNode = this.openingTree
+    this.isGameOver = false
+
+    // 构建讲解模式的线性节点列表
+    this.explainNodeList = []
+    this.buildExplainNodeList(this.openingTree)
+
+    // 讲解模式默认红方视角
+    if (this.board) {
+      this.board.orientation('red')
+      this.board.position(this.engine.fen().split(' ')[0], false)
+    }
+
+    this.explainCurrentIdx = 0
+    const totalSteps = this.explainNodeList.length
+
+    // 获取开局简介（如果有的话）
+    const openingData = openingsData.openings[this.openingId]
+    const intro = (openingData && openingData.meta && openingData.meta.description) ? openingData.meta.description : '本开局无简介'
+
+    this.setData({
+      explainState: 'ready',
+      explainContent: intro,
+      currentStep: 0,
+      totalSteps: totalSteps,
+      position: this.engine.fen().split(' ')[0],
+      turnText: '红方走',
+      statusText: '',
+      lastMove: null,
+      allowedMoves: []
+    })
+  },
+
+  // 构建讲解模式的线性节点列表（用于上一步/下一步遍历）
+  buildExplainNodeList(node) {
+    if (!node) return
+    // 添加当前节点（主变）
+    this.explainNodeList.push(node)
+    // 如果有子节点，递归处理主变（第一个子节点）
+    if (node.children && node.children.length > 0) {
+      this.buildExplainNodeList(node.children[0])
+    }
   },
 
   onSelectPracticeSide(e) {
@@ -193,6 +260,12 @@ Page({
 
   // 核心：严格棋谱模式走子验证
   onBeforeDrop(e) {
+    // 讲解模式下禁止手动走子
+    if (this.data.mode === 'explain') {
+      e.detail.prevent()
+      return
+    }
+
     if (this.isAiThinking || this.isGameOver) {
       e.detail.prevent()
       return
@@ -413,6 +486,126 @@ Page({
       statusText: '',
       lastMove: null,
       allowedMoves: []
+    })
+  },
+
+  // 讲解模式：下一步
+  onExplainNext() {
+    console.log('[onExplainNext] 被调用, explainCurrentIdx:', this.explainCurrentIdx, 'nodeList长度:', this.explainNodeList.length)
+    if (this.explainCurrentIdx >= this.explainNodeList.length) {
+      // 已经到最后一步
+      console.log('[onExplainNext] 已到最后一步, 设置 finished 状态')
+      this.setData({
+        explainState: 'finished',
+        explainContent: this.currentNode.comment || '本开局讲解已结束'
+      })
+      return
+    }
+
+    // 移动到下一步
+    const nextNode = this.explainNodeList[this.explainCurrentIdx]
+    this.explainCurrentIdx++
+    console.log('[onExplainNext] 移动到索引:', this.explainCurrentIdx, '节点move:', nextNode && nextNode.move, '节点comment:', nextNode && nextNode.comment)
+
+    // 执行走子
+    if (nextNode.move) {
+      const from = nextNode.move.slice(0, 2)
+      const to = nextNode.move.slice(2, 4)
+      console.log('[onExplainNext] 准备走子 from:', from, 'to:', to, '引擎turn:', this.engine.turn())
+      const moveResult = this.engine.move({ from, to })
+      console.log('[onExplainNext] 引擎move结果:', moveResult)
+      if (moveResult) {
+        // 棋盘播放动画
+        console.log('[onExplainNext] board是否存在:', !!this.board)
+        if (this.board) {
+          this.board.move(from + '-' + to, true)
+        }
+        this.currentNode = nextNode
+        this.setData({
+          position: this.engine.fen().split(' ')[0],
+          turnText: this.getTurnText(),
+          lastMove: { source: from, target: to },
+          explainContent: nextNode.comment || '',
+          currentStep: this.explainCurrentIdx,
+          explainState: 'playing'
+        })
+        console.log('[onExplainNext] setData完成, 当前fen:', this.engine.fen().split(' ')[0])
+      } else {
+        console.log('[onExplainNext] 引擎move失败, 回退索引')
+        this.explainCurrentIdx--
+      }
+    } else {
+      console.log('[onExplainNext] nextNode.move为空, 不走子')
+    }
+  },
+
+  // 讲解模式：上一步
+  onExplainPrev() {
+    console.log('[onExplainPrev] 被调用, explainCurrentIdx:', this.explainCurrentIdx)
+    if (this.explainCurrentIdx <= 0) {
+      console.log('[onExplainPrev] 已在最开始, 拦截')
+      wx.showToast({ title: '已是最开始', icon: 'none' })
+      return
+    }
+
+    // 回退一步
+    const undoResult = this.engine.undo()
+    console.log('[onExplainPrev] 引擎undo结果:', undoResult)
+    this.explainCurrentIdx--
+    this.currentNode = this.explainCurrentIdx > 0 ? this.explainNodeList[this.explainCurrentIdx - 1] : this.openingTree
+    console.log('[onExplainPrev] 回退到索引:', this.explainCurrentIdx, 'currentNode.move:', this.currentNode && this.currentNode.move)
+
+    // 同步棋盘
+    const fen = this.engine.fen().split(' ')[0]
+    console.log('[onExplainPrev] 同步棋盘fen:', fen, 'board是否存在:', !!this.board)
+    if (this.board) {
+      this.board.position(fen, false)
+    }
+
+    // 获取上一步的注释
+    let content = ''
+    if (this.explainCurrentIdx === 0) {
+      const openingData = openingsData.openings[this.openingId]
+      content = (openingData && openingData.meta && openingData.meta.description) ? openingData.meta.description : '本开局无简介'
+    } else {
+      content = this.currentNode.comment || ''
+    }
+
+    this.setData({
+      position: fen,
+      turnText: this.getTurnText(),
+      lastMove: null,
+      explainContent: content,
+      currentStep: this.explainCurrentIdx,
+      explainState: 'playing'
+    })
+    console.log('[onExplainPrev] setData完成')
+  },
+
+  // 讲解模式：重新开始
+  onExplainRestart() {
+    this.engine = new Xiangqi()
+    this.openingTree = buildNodeMap(JSON.parse(JSON.stringify(this.rawTree)))
+    this.currentNode = this.openingTree
+    this.explainNodeList = []
+    this.buildExplainNodeList(this.openingTree)
+    this.explainCurrentIdx = 0
+
+    if (this.board) {
+      this.board.position(this.engine.fen().split(' ')[0], false)
+    }
+
+    const openingData = openingsData.openings[this.openingId]
+    const intro = (openingData && openingData.meta && openingData.meta.description) ? openingData.meta.description : '本开局无简介'
+
+    this.setData({
+      position: this.engine.fen().split(' ')[0],
+      turnText: '红方走',
+      lastMove: null,
+      explainContent: intro,
+      currentStep: 0,
+      explainState: 'ready',
+      totalSteps: this.explainNodeList.length
     })
   },
 

@@ -1,6 +1,41 @@
 <view class="container">
-  <!-- 选择执红/执黑界面 -->
-  <view wx:if="{{practiceState === 'select'}}" class="practice-select">
+  <!-- 讲解模式 -->
+  <view wx:if="{{mode === 'explain'}}">
+    <!-- 棋盘区域 -->
+    <view class="board-wrapper">
+      <xiangqiboard
+        id="board"
+        position="{{position}}"
+        orientation="{{orientation}}"
+        draggable="{{false}}"
+        moveSound="/static/sounds/move.mp3"
+        checkSound="/static/sounds/check.mp3"
+        bind:beforedrop="onBeforeDrop"
+        bind:drop="onBoardDrop"
+        bind:moveend="onMoveEnd"
+      ></xiangqiboard>
+    </view>
+
+    <!-- 讲解内容区 -->
+    <view class="explain-content">
+      <view class="explain-step-info">
+        <text class="step-text">第 {{currentStep}} / {{totalSteps}} 步</text>
+      </view>
+      <view class="explain-text">
+        <text>{{explainContent}}</text>
+      </view>
+    </view>
+
+    <!-- 讲解控制按钮 -->
+    <view class="controls">
+      <button size="mini" bindtap="onExplainPrev">上一步</button>
+      <button size="mini" bindtap="onExplainNext">下一步</button>
+      <button size="mini" bindtap="onExplainRestart">重新开始</button>
+    </view>
+  </view>
+
+  <!-- 练习模式：选择执红/执黑界面 -->
+  <view wx:elif="{{mode === 'practice' && practiceState === 'select'}}" class="practice-select">
     <view class="practice-select-title">请选择练习方式</view>
     <view class="practice-select-buttons">
       <button class="practice-side-btn" bindtap="onSelectPracticeSide" data-side="red">执红练习</button>
@@ -12,8 +47,8 @@
     </view>
   </view>
 
-  <!-- 棋盘区域（始终渲染，但仅在 playing 时显示） -->
-  <view wx:elif="{{practiceState === 'playing'}}" class="board-wrapper">
+  <!-- 练习模式：棋盘区域（始终渲染，但仅在 playing 时显示） -->
+  <view wx:elif="{{mode === 'practice' && practiceState === 'playing'}}" class="board-wrapper">
     <xiangqiboard
       id="board"
       position="{{position}}"
@@ -27,18 +62,18 @@
     ></xiangqiboard>
   </view>
 
-  <!-- 底部信息栏（仅在 playing 时显示） -->
-  <view wx:if="{{practiceState === 'playing'}}" class="info-bar">
+  <!-- 底部信息栏（仅在练习 playing 时显示） -->
+  <view wx:if="{{mode === 'practice' && practiceState === 'playing'}}" class="info-bar">
     <text class="turn-text">{{turnText}}</text>
     <text class="status-text" wx:if="{{statusText}}">{{statusText}}</text>
   </view>
 
-  <view wx:if="{{practiceState === 'playing' && allowedMoves.length > 0}}" class="hints">
+  <view wx:if="{{mode === 'practice' && practiceState === 'playing' && allowedMoves.length > 0}}" class="hints">
     <text class="hint-label">当前允许走法：</text>
     <text class="hint-moves">{{allowedMoves.join('、')}}</text>
   </view>
 
-  <view wx:if="{{practiceState === 'playing'}}" class="controls">
+  <view wx:if="{{mode === 'practice' && practiceState === 'playing'}}" class="controls">
     <button size="mini" bindtap="onUndo">悔棋</button>
     <button size="mini" bindtap="onRestart">重新开始</button>
   </view>
