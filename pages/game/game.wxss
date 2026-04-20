@@ -189,3 +189,35 @@
   color: #333;
   line-height: 1.6;
 }
+
+/* 分支选择 */
+.branch-select {
+  width: 100%;
+  max-width: 720rpx;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: #fff7e6;
+  border: 1rpx solid #ffd699;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+}
+
+.branch-select-title {
+  display: block;
+  font-size: 28rpx;
+  color: #8B4513;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.branch-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.branch-btn {
+  background-color: #8B4513;
+  color: #fff;
+}
