@@ -19,10 +19,20 @@
     <!-- 讲解内容区 -->
     <view class="explain-content">
       <view class="explain-step-info">
-        <text class="step-text">第 {{currentStep}} / {{totalSteps}} 步</text>
+        <text class="step-text">第 {{currentStep}} 步</text>
       </view>
       <view class="explain-text">
         <text>{{explainContent}}</text>
+      </view>
+    </view>
+
+    <!-- 分支选择 -->
+    <view wx:if="{{explainState === 'selecting'}}" class="branch-select">
+      <text class="branch-select-title">请选择变例：</text>
+      <view class="branch-buttons">
+        <button wx:for="{{branchOptions}}" wx:key="index" size="mini" bindtap="onSelectBranch" data-index="{{item.index}}" class="branch-btn">
+          {{item.label ? '【' + item.label + '】' : ''}}{{item.san || item.move}}
+        </button>
       </view>
     </view>
 
