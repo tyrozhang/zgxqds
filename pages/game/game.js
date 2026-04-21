@@ -454,28 +454,8 @@ Page({
   },
 
   onRestart() {
-    // 重置引擎状态
-    if (this.engine) {
-      this.engine = new Xiangqi()
-    }
-    if (this.openingTree) {
-      this.currentNode = this.openingTree
-    }
-    this.isGameOver = false
-    this.isAiThinking = false
-
-    const fen = this.engine.fen().split(' ')[0]
-    if (this.board) {
-      this.board.position(fen, false)
-      this.board.orientation(this.userSide)
-    }
-    this.setData({
-      position: fen,
-      practiceState: 'select',
-      statusText: '',
-      lastMove: null,
-      allowedMoves: []
-    })
+    // 重新初始化游戏，保持用户之前选择的执棋方
+    this.initGame(this.userSide, this.rawTree)
   },
 
   // 讲解模式：下一步
