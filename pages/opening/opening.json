@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "开局变例",
+  "navigationBarTitleText": "中国象棋·开局大师",
   "usingComponents": {
     "xiangqiboard": "/components/xiangqiboard/xiangqiboard"
   }
