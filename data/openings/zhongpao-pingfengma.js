@@ -158,7 +158,7 @@ module.exports = {
               comment: '黑方平炮准备开车路'
             },
             {
-              move: 'h2h8',
+              move: 'h0h6',
               san: '车二进六',
               comment: '红车过河压制，黑方被动',
               eval: '-1.2',
@@ -181,7 +181,7 @@ module.exports = {
                       ]
                     },
                     {
-                      move: 'h8f8',
+                      move: 'h6g6',
                       san: '车二平三',
                       comment: '红方平车压马'
                     },
