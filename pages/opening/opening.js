@@ -3,7 +3,7 @@ const data = require('../../data/openings/data')
 Page({
   data: {
     categories: [],
-    selectedCategoryIndex: 0,
+    expandedCategoryIndex: 0,
     openings: []
   },
 
@@ -12,15 +12,17 @@ Page({
     console.log('[opening] data.categories:', data.categories)
     this.setData({ categories: data.categories })
     if (data.categories && data.categories.length) {
-      this.setData({ openings: data.categories[0].openings || [] })
+      this.setData({
+        openings: data.categories[0].openings || []
+      })
     }
   },
 
-  onSelectCategory(e) {
+  onToggleCategory(e) {
     const index = e.currentTarget.dataset.index
     const cat = this.data.categories[index]
     this.setData({
-      selectedCategoryIndex: index,
+      expandedCategoryIndex: this.data.expandedCategoryIndex === index ? -1 : index,
       openings: cat ? (cat.openings || []) : []
     })
   },
