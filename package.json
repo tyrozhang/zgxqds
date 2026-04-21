@@ -8,7 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "jest --config jest.e2e.config.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
   "type": "commonjs",
   "devDependencies": {
     "jest": "^30.3.0",
+    "miniprogram-automator": "^0.12.1",
     "sharp": "^0.34.5"
   }
 }
